@@ -1,19 +1,24 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "1.7.21" apply false
 }
 
-group = "io.github.nickacpt"
-version = "1.0-SNAPSHOT"
+allprojects {
+    group = "io.github.nickacpt"
+    version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
+    this.apply(plugin = "org.jetbrains.kotlin.jvm")
 
-dependencies {
-}
+    this.repositories {
+        mavenCentral()
+    }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "18"
+    this.dependencies {
+        "implementation"(kotlin("stdlib"))
+    }
+
+    this.tasks.withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "18"
+    }
 }
