@@ -15,6 +15,7 @@ class LobbyPlugin : JavaPlugin() {
     }
 
     val config: LobbyConfiguration by getConfigurationFileProvider()
+
     override fun onEnable() {
         Bukkit.getPluginManager().registerEvents(PlayerEvents, this)
         Bukkit.getPluginManager().registerEvents(WorldEvents, this)

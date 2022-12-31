@@ -12,6 +12,8 @@ object WorldEvents : Listener {
         val world = e.world
 
         world.setGameRule(GameRule.DISABLE_RAIDS, true)
+        world.setGameRule(GameRule.FIRE_DAMAGE, true)
+        world.setGameRule(GameRule.FALL_DAMAGE, true)
 
         world.setGameRule(GameRule.DO_FIRE_TICK, false)
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false)

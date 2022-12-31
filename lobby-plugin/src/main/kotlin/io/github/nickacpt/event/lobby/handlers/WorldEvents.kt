@@ -19,7 +19,6 @@ object WorldEvents : Listener {
         e.isCancelled = true
     }
 
-
     @EventHandler
     fun onWorldLoad(e: WorldLoadEvent) {
         val config = LobbyPlugin.instance.config
