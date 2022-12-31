@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.lobby.config
+package io.github.nickacpt.event.lobby.config.lobby
 
 import org.bukkit.Bukkit
 import org.bukkit.Location

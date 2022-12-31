@@ -1,5 +1,6 @@
 package io.github.nickacpt.event.core.utils
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.dataformat.toml.TomlMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import org.bukkit.plugin.java.JavaPlugin
@@ -9,6 +10,7 @@ class ConfigurationFileProvider<T>(private val clazz: Class<T>) {
     companion object {
         val mapper: TomlMapper = TomlMapper.builder()
             .addModule(kotlinModule())
+            .propertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE)
             .build()
     }
 

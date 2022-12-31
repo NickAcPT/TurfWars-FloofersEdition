@@ -3,16 +3,24 @@ package io.github.nickacpt.event.lobby.handlers
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import io.github.nickacpt.event.core.utils.resetPlayer
 import io.github.nickacpt.event.lobby.LobbyPlugin
+import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.spigotmc.event.player.PlayerSpawnLocationEvent
 
 object PlayerEvents : Listener {
+
+    @EventHandler
+    fun onPlayerInteractWithFoxBrain(e: InventoryClickEvent) {
+        // Prevent players from interacting with the items inside the fox brain shulker box
+        if (e.inventory.getHolder(false) is ShulkerBox) {
+            e.isCancelled = true
+        }
+    }
 
     @EventHandler(ignoreCancelled = false)
     fun onPlayerDamaged(e: EntityDamageEvent) {
@@ -38,16 +46,5 @@ object PlayerEvents : Listener {
     @EventHandler
     fun onPlayerPostSpawn(e: PlayerPostRespawnEvent) {
         e.player.resetPlayer(teleportToSpawn = true, canFly = true)
-    }
-
-    @EventHandler
-    fun onPlayerJoin(e: PlayerJoinEvent) {
-        e.joinMessage(null)
-        e.player.resetPlayer(teleportToSpawn = false, canFly = true)
-    }
-
-    @EventHandler
-    fun onPlayerLeave(e: PlayerQuitEvent) {
-        e.quitMessage(null)
     }
 }

@@ -39,7 +39,4 @@ fun Player.resetPlayer(teleportToSpawn: Boolean, canFly: Boolean?) {
     if (teleportToSpawn) {
         teleport(world.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN)
     }
-
-    // Reset the player's fall distance
-    fallDistance = 0f
 }
