@@ -1,6 +1,6 @@
 package io.github.nickacpt.event.lobby.handlers
 
-import io.github.nickacpt.event.core.utils.resetPlayer
+import io.github.nickacpt.event.utils.resetPlayer
 import io.github.nickacpt.event.lobby.LobbyPlugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

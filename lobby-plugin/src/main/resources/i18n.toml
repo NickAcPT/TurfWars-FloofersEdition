@@ -1,5 +1,6 @@
 [static-placeholders]
-prefix = "<gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA><bold>TurfWars</bold>> </gradient>"
+prefix = "<gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA><bold>TurfWars</bold> > </gradient>"
 
 [messages]
 player-joined="<prefix><yellow><player> joined the lobby."
+player-left="<prefix><yellow><player> left the lobby."

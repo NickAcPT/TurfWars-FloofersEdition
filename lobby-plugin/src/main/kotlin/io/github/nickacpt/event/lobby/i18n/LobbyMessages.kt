@@ -8,4 +8,7 @@ import org.bukkit.entity.Player
 interface LobbyMessages {
     @Message("player-joined")
     fun playerJoinMessage(@Placeholder("player") player: Player): Component?
+
+    @Message("player-left")
+    fun playerLeaveMessage(@Placeholder("player") player: Player): Component?
 }

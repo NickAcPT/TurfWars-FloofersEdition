@@ -3,6 +3,12 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription.PluginLoadOrder
 bukkit {
     main = "io.github.nickacpt.event.core.CorePlugin"
     load = PluginLoadOrder.STARTUP
+
+    commands {
+        register("locraw") {
+            description = "Implementation of the locraw command for badly coded mods"
+        }
+    }
 }
 
 dependencies {

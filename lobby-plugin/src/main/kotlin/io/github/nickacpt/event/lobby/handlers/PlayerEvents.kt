@@ -1,7 +1,7 @@
 package io.github.nickacpt.event.lobby.handlers
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
-import io.github.nickacpt.event.core.utils.resetPlayer
+import io.github.nickacpt.event.utils.resetPlayer
 import io.github.nickacpt.event.lobby.LobbyPlugin
 import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.EntityType

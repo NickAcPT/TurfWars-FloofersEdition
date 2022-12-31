@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.core.utils
+package io.github.nickacpt.event.utils
 
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute.*

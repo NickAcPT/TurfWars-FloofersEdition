@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.core.utils.i18n
+package io.github.nickacpt.event.utils.messages
 
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component

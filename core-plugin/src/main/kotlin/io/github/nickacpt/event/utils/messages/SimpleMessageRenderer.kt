@@ -1,6 +1,6 @@
-package io.github.nickacpt.event.core.utils.i18n
+package io.github.nickacpt.event.utils.messages
 
-import io.github.nickacpt.event.core.config.i18n.I18nConfiguration
+import io.github.nickacpt.event.config.i18n.I18nConfiguration
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage

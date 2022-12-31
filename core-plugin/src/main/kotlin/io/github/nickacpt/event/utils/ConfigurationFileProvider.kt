@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.core.utils
+package io.github.nickacpt.event.utils
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.dataformat.toml.TomlMapper
