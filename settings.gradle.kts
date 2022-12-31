@@ -1,4 +1,4 @@
 
 rootProject.name = "turf-wars-event"
 
-include("core", "paper-plugin")
+include("core-plugin", "lobby-plugin", "minigame-plugin")
