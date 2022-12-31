@@ -1,4 +1,5 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -24,9 +25,16 @@ allprojects {
 
     this.dependencies {
         "implementation"(kotlin("stdlib"))
+        "implementation"(kotlin("reflect"))
         if (isMinecraftPlugin) {
-            "library"(kotlin("stdlib"))
             "compileOnly"("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
+
+            if (isCore) {
+                "library"(kotlin("stdlib"))
+                "library"(kotlin("reflect"))
+            } else {
+                "implementation"(project(":core-plugin"))
+            }
         }
     }
 
@@ -47,6 +55,10 @@ allprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(18))
         }
+    }
+
+    this.tasks.withType(Jar::class.java) {
+        destinationDirectory.set(File("""C:\Users\NickAc\Desktop\Turf Wars\Lobby\plugins"""))
     }
 
     this.tasks.withType<KotlinCompile> {

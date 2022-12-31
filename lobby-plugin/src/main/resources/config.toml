@@ -1,0 +1,8 @@
+worldTime = 18000
+
+[spawn]
+x = -7.5
+y = 84.0
+z = 4.5
+yaw = -90.0
+pitch = 0.0
