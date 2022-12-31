@@ -12,7 +12,11 @@ class ConfigurationFileProvider<T>(private val clazz: Class<T>) {
             .build()
     }
 
+    private var cachedValue: T? = null
+
     operator fun getValue(plugin: JavaPlugin, property: KProperty<*>): T {
+        if (cachedValue != null) return cachedValue!!
+
         plugin.dataFolder.mkdirs()
         val file = plugin.dataFolder.resolve("${property.name}.toml")
 
@@ -21,7 +25,7 @@ class ConfigurationFileProvider<T>(private val clazz: Class<T>) {
             plugin.saveResource("${property.name}.toml", false)
         }
 
-        return mapper.readValue(file, clazz)
+        return mapper.readValue(file, clazz).also { cachedValue = it }
     }
 }
 
