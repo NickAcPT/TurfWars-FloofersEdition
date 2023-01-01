@@ -9,7 +9,7 @@ import org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH
 import org.bukkit.entity.Player
 
 val Player.turfPlayer: TurfPlayer
-    get() = TurfPlayerManager.getTurfPlayer(uniqueId)
+    get() = TurfPlayerManager.getOrLoadTurfPlayer(uniqueId)
 
 fun Player.refreshPlayer(teleportToSpawn: Boolean, canFly: Boolean?) {
     // Set the player's tag

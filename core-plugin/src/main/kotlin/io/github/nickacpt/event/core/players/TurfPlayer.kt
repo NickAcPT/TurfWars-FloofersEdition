@@ -10,7 +10,8 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
 
-class TurfPlayer(val uuid: UUID) : ForwardingAudience.Single {
+class TurfPlayer(val uuid: UUID, val data: TurfPlayerData) : ForwardingAudience.Single {
+
     val displayName: Component
         get() = Component.text {
             it.append(currentTag.value)
@@ -18,7 +19,8 @@ class TurfPlayer(val uuid: UUID) : ForwardingAudience.Single {
             it.appendSpace()
             bukkitPlayer?.name()?.let { name -> it.append(name) }
         }
-    var currentTag: PlayerTag = TagsManager.tags.first()
+
+    var currentTag: PlayerTag = TagsManager.findByName(data.currentTagName) ?: TagsManager.tags.first()
 
     val bukkitPlayer: Player?
         get() = Bukkit.getPlayer(uuid)

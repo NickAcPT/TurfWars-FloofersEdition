@@ -19,8 +19,13 @@ object TagsManager {
     }
 
     private fun registerTag(key: String, value: String, adminOnly: Boolean) {
-        logger.info("Registering tag \"$key\"")
+        logger.info("Registering ${if (!adminOnly) "" else "admin-only "}tag \"$key\"")
         tagsMutable.add(PlayerTag(key, miniMessage().deserialize(value), adminOnly))
+    }
+
+    fun findByName(currentTagName: String?): PlayerTag? {
+        if (currentTagName == null) return null
+        return tags.firstOrNull { it.name == currentTagName }
     }
 
 }

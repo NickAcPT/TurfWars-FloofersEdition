@@ -38,4 +38,8 @@ class CorePlugin : JavaPlugin() {
         Bukkit.getPluginManager().registerEvents(TurfPlayerManager, this)
     }
 
+    override fun onDisable() {
+        // Save all player data
+        TurfPlayerManager.saveAll()
+    }
 }
