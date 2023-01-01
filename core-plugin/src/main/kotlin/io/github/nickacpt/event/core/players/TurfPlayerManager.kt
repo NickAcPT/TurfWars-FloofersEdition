@@ -31,7 +31,12 @@ object TurfPlayerManager : Listener {
         val playersPath = CorePlugin.instance.dataFolder.resolve("players")
         playersPath.mkdirs()
 
-        return mapper.readValue(playersPath.resolve("$uuid.json"), TurfPlayerData::class.java)
+        val playerPath = playersPath.resolve("$uuid.json")
+        if (!playerPath.exists()) {
+            return TurfPlayerData(uuid)
+        }
+
+        return mapper.readValue(playerPath, TurfPlayerData::class.java)
     }
 
     private fun savePlayerData(uuid: UUID, data: TurfPlayerData) {
