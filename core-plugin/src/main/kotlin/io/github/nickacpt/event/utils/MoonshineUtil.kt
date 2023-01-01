@@ -36,7 +36,7 @@ inline fun <reified T> JavaPlugin.moonshine(configuration: I18nConfiguration): T
         .resolvingWithStrategy(StandardPlaceholderResolverStrategy(StandardSupertypeThenInterfaceSupertypeStrategy(false)))
 
         // This is used to resolve placeholders in the message. These take the parameters of the method and resolve them into a component.
-        .weightedPlaceholderResolver(Player::class.java, simplePlaceholderResolver { it.displayName() }, 0)
+        .weightedPlaceholderResolver(Player::class.java, simplePlaceholderResolver { it.turfPlayer.displayName }, 0)
         .weightedPlaceholderResolver(String::class.java, simplePlaceholderResolver { Component.text(it) }, 0)
         .weightedPlaceholderResolver(Component::class.java, simplePlaceholderResolver { it }, 0)
 

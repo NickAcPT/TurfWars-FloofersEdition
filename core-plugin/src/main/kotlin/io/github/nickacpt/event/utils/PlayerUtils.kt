@@ -1,11 +1,19 @@
 package io.github.nickacpt.event.utils
 
+import io.github.nickacpt.event.core.players.TurfPlayer
+import io.github.nickacpt.event.core.players.TurfPlayerManager
 import org.bukkit.GameMode
-import org.bukkit.attribute.Attribute.*
+import org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
 
-fun Player.resetPlayer(teleportToSpawn: Boolean, canFly: Boolean?) {
+val Player.turfPlayer: TurfPlayer
+    get() = TurfPlayerManager.getTurfPlayer(uniqueId)
+
+fun Player.refreshPlayer(teleportToSpawn: Boolean, canFly: Boolean?) {
+    // Set the player's tag
+    displayName(turfPlayer.displayName)
+
     // Set the player's gamemode to adventure
     gameMode = GameMode.ADVENTURE
 

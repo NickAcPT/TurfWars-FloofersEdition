@@ -1,8 +1,8 @@
 package io.github.nickacpt.event.lobby.handlers
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
-import io.github.nickacpt.event.utils.resetPlayer
 import io.github.nickacpt.event.lobby.LobbyPlugin
+import io.github.nickacpt.event.utils.refreshPlayer
 import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
@@ -31,7 +31,7 @@ object PlayerEvents : Listener {
 
         // If the damage is caused by Lava, teleport the player to the spawn
         if (e.cause == EntityDamageEvent.DamageCause.LAVA) {
-            entity.resetPlayer(teleportToSpawn = true, canFly = null)
+            entity.refreshPlayer(teleportToSpawn = true, canFly = null)
         }
 
         // Cancel all damage to players
@@ -45,6 +45,6 @@ object PlayerEvents : Listener {
 
     @EventHandler
     fun onPlayerPostSpawn(e: PlayerPostRespawnEvent) {
-        e.player.resetPlayer(teleportToSpawn = true, canFly = true)
+        e.player.refreshPlayer(teleportToSpawn = true, canFly = true)
     }
 }

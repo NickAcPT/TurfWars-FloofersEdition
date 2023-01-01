@@ -1,6 +1,6 @@
 package io.github.nickacpt.event.lobby.handlers
 
-import io.github.nickacpt.event.utils.resetPlayer
+import io.github.nickacpt.event.utils.refreshPlayer
 import io.github.nickacpt.event.lobby.LobbyPlugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -11,7 +11,7 @@ object PlayerIoEvents : Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         e.joinMessage(LobbyPlugin.instance.messages.playerJoinMessage(e.player))
-        e.player.resetPlayer(teleportToSpawn = false, canFly = true)
+        e.player.refreshPlayer(teleportToSpawn = false, canFly = true)
     }
 
     @EventHandler
