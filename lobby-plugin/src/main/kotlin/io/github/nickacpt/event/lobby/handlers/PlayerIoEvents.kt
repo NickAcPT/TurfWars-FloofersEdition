@@ -1,7 +1,7 @@
 package io.github.nickacpt.event.lobby.handlers
 
-import io.github.nickacpt.event.utils.refreshPlayer
 import io.github.nickacpt.event.lobby.LobbyPlugin
+import io.github.nickacpt.event.utils.refreshPlayer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -16,6 +16,6 @@ object PlayerIoEvents : Listener {
 
     @EventHandler
     fun onPlayerLeave(e: PlayerQuitEvent) {
-        e.quitMessage(null)
+        e.quitMessage(LobbyPlugin.instance.messages.playerLeaveMessage(e.player))
     }
 }
