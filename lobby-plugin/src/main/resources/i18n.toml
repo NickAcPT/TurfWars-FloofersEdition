@@ -4,3 +4,10 @@ prefix = "<gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA><bold>TurfWa
 [messages]
 player-joined="<prefix><yellow><player> joined the lobby."
 player-left="<prefix><yellow><player> left the lobby."
+
+fell-in-lava="<red>Ouch! Careful not to fall in the lava!"
+
+[[messages.parkour]]
+started="<prefix><green>Parkour started."
+cancelled="<prefix><red>Parkour cancelled."
+finished="<prefix><green>Parkour finished!"

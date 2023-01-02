@@ -16,6 +16,9 @@ class LobbyPlugin : JavaPlugin() {
     companion object {
         val instance: LobbyPlugin
             get() = getPlugin(LobbyPlugin::class.java)
+
+        val messages: LobbyMessages
+            get() = instance.messages
     }
 
     val config: LobbyConfiguration by getConfigurationFileProvider()

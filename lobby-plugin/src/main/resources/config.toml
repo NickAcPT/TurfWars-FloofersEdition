@@ -6,3 +6,13 @@ y = 84.0
 z = 4.5
 yaw = -90.0
 pitch = 0.0
+
+[parkour]
+[parkour.start]
+x = 26
+y = 83
+z = 33
+[parkour.end]
+x = 10
+y = 83
+z = 36

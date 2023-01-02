@@ -31,6 +31,7 @@ object PlayerEvents : Listener {
 
         // If the damage is caused by Lava, teleport the player to the spawn
         if (e.cause == EntityDamageEvent.DamageCause.LAVA) {
+            LobbyPlugin.messages.fellInLava(entity)
             entity.refreshPlayer(teleportToSpawn = true, canFly = null)
         }
 
