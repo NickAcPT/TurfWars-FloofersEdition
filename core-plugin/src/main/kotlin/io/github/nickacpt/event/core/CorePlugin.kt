@@ -3,6 +3,7 @@ package io.github.nickacpt.event.core
 import io.github.nickacpt.event.config.i18n.I18nConfiguration
 import io.github.nickacpt.event.core.commands.LocRawCommand
 import io.github.nickacpt.event.core.config.CoreConfig
+import io.github.nickacpt.event.core.display.PlayerDisplayManager
 import io.github.nickacpt.event.core.handlers.ChatEvents
 import io.github.nickacpt.event.core.handlers.WorldEvents
 import io.github.nickacpt.event.core.players.TurfPlayerManager
@@ -36,6 +37,7 @@ class CorePlugin : JavaPlugin() {
         Bukkit.getPluginManager().registerEvents(ChatEvents, this)
         Bukkit.getPluginManager().registerEvents(WorldEvents, this)
         Bukkit.getPluginManager().registerEvents(TurfPlayerManager, this)
+        Bukkit.getPluginManager().registerEvents(PlayerDisplayManager, this)
     }
 
     override fun onDisable() {

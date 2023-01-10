@@ -1,6 +1,7 @@
 package io.github.nickacpt.event.utils
 
 import io.github.nickacpt.event.core.CorePlugin
+import io.github.nickacpt.event.core.display.events.TurfPlayerRefreshEvent
 import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerManager
 import org.bukkit.Bukkit
@@ -11,12 +12,17 @@ import org.bukkit.entity.Player
 val Player.turfPlayer: TurfPlayer
     get() = TurfPlayerManager.getOrLoadTurfPlayer(uniqueId)
 
-fun Player.refreshPlayer(teleportToSpawn: Boolean, canFly: Boolean?) {
-    // Set the player's tag
-    displayName(turfPlayer.displayName)
+fun Player.refreshPlayer(
+    teleportToSpawn: Boolean,
+    canFly: Boolean? = null,
+    playerGameMode: GameMode = GameMode.ADVENTURE
+) {
+    TurfPlayerRefreshEvent(turfPlayer).callEvent()
+
+    playerListName(turfPlayer.getDisplayName())
 
     // Set the player's gamemode to adventure
-    gameMode = GameMode.ADVENTURE
+    gameMode = playerGameMode
 
     // Reset the player's health and food level
     health = getAttribute(GENERIC_MAX_HEALTH)?.value ?: 20.0

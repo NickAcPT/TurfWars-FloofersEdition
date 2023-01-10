@@ -7,7 +7,6 @@ player-left="<prefix><yellow><player> left the lobby."
 
 fell-in-lava="<red>Ouch! Careful not to fall in the lava!"
 
-[[messages.parkour]]
-started="<prefix><green>Parkour started."
-cancelled="<prefix><red>Parkour cancelled."
-finished="<prefix><green>Parkour finished!"
+parkour-started="<prefix><green>Parkour started."
+parkour-cancelled="<prefix><red>Parkour cancelled."
+parkour-finished="<prefix><green>Parkour finished!"

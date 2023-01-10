@@ -16,12 +16,12 @@ interface LobbyMessages {
     @Message("fell-in-lava")
     fun fellInLava(@Receiver player: Player)
 
-    @Message("parkour.started")
+    @Message("parkour-started")
     fun parkourStarted(@Receiver player: Player)
 
-    @Message("parkour.finished")
+    @Message("parkour-finished")
     fun parkourFinished(@Receiver player: Player)
 
-    @Message("parkour.cancelled")
+    @Message("parkour-cancelled")
     fun parkourCancelled(@Receiver player: Player)
 }
