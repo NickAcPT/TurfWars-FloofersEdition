@@ -32,7 +32,7 @@ allprojects {
             if (isCore) {
                 "library"(kotlin("stdlib"))
                 "library"(kotlin("reflect"))
-            } else {
+            } else if (!name.contains("replay")) {
                 "implementation"(project(":core-plugin"))
             }
         }
