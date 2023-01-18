@@ -1,6 +1,6 @@
 package io.github.nickacpt.replay.platform
 
-import io.github.nickacpt.behaviours.replay.Replay
+import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.ReplaySystem
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayItemStack
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayPlatform
