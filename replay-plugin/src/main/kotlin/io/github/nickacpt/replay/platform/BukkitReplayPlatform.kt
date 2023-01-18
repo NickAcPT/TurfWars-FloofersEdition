@@ -1,12 +1,12 @@
 package io.github.nickacpt.replay.platform
 
-import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.ReplaySystem
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayItemStack
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayPlatform
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayViewer
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayWorld
-import io.github.nickacpt.behaviours.replay.playback.session.Replayer
+import io.github.nickacpt.behaviours.replay.model.Replay
+import io.github.nickacpt.behaviours.replay.playback.Replayer
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.entity.Player
