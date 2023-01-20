@@ -25,14 +25,15 @@ object BukkitReplayPlatform : ReplayPlatform<ItemStack, Player, World> {
     }
 
     override fun convertIntoPlatformStack(stack: ReplayItemStack): ItemStack {
-        if (stack is BinarySerializedReplayItemStack) {
-            return ItemStack.deserializeBytes(stack.bytes).ensureServerConversions()
+        return when (stack) {
+            is BinarySerializedReplayItemStack -> {
+                ItemStack.deserializeBytes(stack.bytes).ensureServerConversions()
+            }
+            is ReplayControlItemType -> {
+                ItemStackUtils.createControlItemStack(stack)
+            }
+            else -> throw IllegalArgumentException("Unknown ReplayItemStack type: ${stack::class}")
         }
-        else if (stack is ReplayControlItemType) {
-            return ItemStackUtils.createControlItemStack(stack)
-        }
-
-        throw IllegalArgumentException("Unknown ReplayItemStack type: ${stack::class}")
     }
 
     override fun convertIntoReplayViewer(viewer: Player): ReplayViewer {
