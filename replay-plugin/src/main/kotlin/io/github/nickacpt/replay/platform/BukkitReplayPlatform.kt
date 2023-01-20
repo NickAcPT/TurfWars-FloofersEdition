@@ -12,6 +12,7 @@ import io.github.nickacpt.replay.platform.ItemStackUtils.controlType
 import io.github.nickacpt.replay.platform.abstractions.BinarySerializedReplayItemStack
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
+import io.github.nickacpt.replay.platform.abstractions.BukkitReplayerImpl
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.entity.Player
@@ -54,6 +55,6 @@ object BukkitReplayPlatform : ReplayPlatform<ItemStack, Player, World> {
         replaySystem: System,
         replay: Replay
     ): Replayer<ItemStack, Player, World, Platform, System> {
-        TODO("Not yet implemented")
+        return BukkitReplayerImpl()
     }
 }
