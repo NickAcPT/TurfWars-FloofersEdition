@@ -1,4 +1,4 @@
-package io.github.nickacpt.replay.platform
+package io.github.nickacpt.replay.platform.abstractions
 
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayWorld
 import java.util.*

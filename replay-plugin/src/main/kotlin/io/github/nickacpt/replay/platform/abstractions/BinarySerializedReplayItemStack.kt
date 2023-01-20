@@ -1,13 +1,13 @@
-package io.github.nickacpt.replay.platform
+package io.github.nickacpt.replay.platform.abstractions
 
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayItemStack
 
-data class BinarySerializedIteReplayItemStack(val bytes: ByteArray) : ReplayItemStack {
+data class BinarySerializedReplayItemStack(val bytes: ByteArray) : ReplayItemStack {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BinarySerializedIteReplayItemStack
+        other as BinarySerializedReplayItemStack
 
         if (!bytes.contentEquals(other.bytes)) return false
 
