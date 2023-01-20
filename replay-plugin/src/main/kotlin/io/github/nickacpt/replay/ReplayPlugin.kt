@@ -7,6 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin
 class ReplayPlugin : JavaPlugin() {
     companion object {
         val replaySystem = ReplaySystem(BukkitReplayPlatform)
+
+        val instance get() = getPlugin(ReplayPlugin::class.java)
     }
 
 }

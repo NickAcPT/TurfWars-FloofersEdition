@@ -5,8 +5,10 @@ import io.github.nickacpt.behaviours.replay.abstractions.ReplayItemStack
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayPlatform
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayViewer
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayWorld
+import io.github.nickacpt.behaviours.replay.items.ReplayControlItemType
 import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.playback.Replayer
+import io.github.nickacpt.replay.platform.ItemStackUtils.controlType
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.entity.Player
@@ -15,11 +17,18 @@ import org.bukkit.inventory.ItemStack
 object BukkitReplayPlatform : ReplayPlatform<ItemStack, Player, World> {
 
     override fun convertIntoReplayStack(stack: ItemStack): ReplayItemStack {
-        TODO("Not yet implemented")
+        return stack.controlType?.let { return it } ?: BinarySerializedIteReplayItemStack(stack.serializeAsBytes())
     }
 
     override fun convertIntoPlatformStack(stack: ReplayItemStack): ItemStack {
-        TODO("Not yet implemented")
+        if (stack is BinarySerializedIteReplayItemStack) {
+            return ItemStack.deserializeBytes(stack.bytes).ensureServerConversions()
+        }
+        else if (stack is ReplayControlItemType) {
+            return ItemStackUtils.createControlItemStack(stack)
+        }
+
+        throw IllegalArgumentException("Unknown ReplayItemStack type: ${stack::class}")
     }
 
     override fun convertIntoReplayViewer(viewer: Player): ReplayViewer {
@@ -34,14 +43,14 @@ object BukkitReplayPlatform : ReplayPlatform<ItemStack, Player, World> {
         return Bukkit.getWorld(world.id)
     }
 
+    override fun convertIntoReplayWorld(world: World): ReplayWorld {
+        return BukkitReplayWorld(world.uid)
+    }
+
     override fun <Platform : ReplayPlatform<ItemStack, Player, World>, System : ReplaySystem<ItemStack, Player, World, Platform>> createReplayer(
         replaySystem: System,
         replay: Replay
     ): Replayer<ItemStack, Player, World, Platform, System> {
         TODO("Not yet implemented")
-    }
-
-    override fun convertIntoReplayWorld(world: World): ReplayWorld {
-        return BukkitReplayWorld(world.uid)
     }
 }
