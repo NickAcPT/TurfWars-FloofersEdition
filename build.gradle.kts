@@ -12,6 +12,7 @@ allprojects {
     version = "1.0-SNAPSHOT"
 
     val isCore = name.contains("core")
+    val isReplay = name.contains("replay")
     val isMinecraftPlugin = name.contains("-plugin")
 
     this.apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -32,7 +33,7 @@ allprojects {
             if (isCore) {
                 "library"(kotlin("stdlib"))
                 "library"(kotlin("reflect"))
-            } else if (!name.contains("replay")) {
+            } else if (!isReplay) {
                 "implementation"(project(":core-plugin"))
             }
         }
@@ -45,7 +46,7 @@ allprojects {
 
             if (isCore) {
                 name = "Core"
-            } else {
+            } else if (!isReplay) {
                 depend = listOf("Core")
             }
         }
@@ -58,7 +59,8 @@ allprojects {
     }
 
     this.tasks.withType(Jar::class.java) {
-        destinationDirectory.set(File("""C:\Users\NickAc\Desktop\Turf Wars\${if (name.contains("replay")) "Replay" else "Lobby"}\plugins"""))
+        val folder = if (this@allprojects.name.contains("replay")) "Replay" else "Lobby"
+        destinationDirectory.set(File("""C:\Users\NickAc\Desktop\Turf Wars\$folder\plugins"""))
     }
 
     this.tasks.withType<KotlinCompile> {

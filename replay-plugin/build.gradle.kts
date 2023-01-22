@@ -6,6 +6,8 @@ plugins {
 
 dependencies {
     implementation("io.github.nickacpt.behaviours:replay")
+    compileOnly(library("cloud.commandframework", "cloud-paper", "1.8.0"))
+    compileOnly(library("cloud.commandframework", "cloud-annotations", "1.8.0"))
 }
 
 bukkit {
