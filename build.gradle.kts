@@ -58,7 +58,7 @@ allprojects {
     }
 
     this.tasks.withType(Jar::class.java) {
-        destinationDirectory.set(File("""C:\Users\NickAc\Desktop\Turf Wars\Lobby\plugins"""))
+        destinationDirectory.set(File("""C:\Users\NickAc\Desktop\Turf Wars\${if (name.contains("replay")) "Replay" else "Lobby"}\plugins"""))
     }
 
     this.tasks.withType<KotlinCompile> {

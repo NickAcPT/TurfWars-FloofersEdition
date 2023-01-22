@@ -7,7 +7,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
-object ItemStackUtils {
+object ReplayItemStackUtils {
     private val CONTROL_TYPE_KEY = NamespacedKey(ReplayPlugin.instance, "replay_control_type")
 
     fun createControlItemStack(control: ReplayControlItemType): ItemStack {
