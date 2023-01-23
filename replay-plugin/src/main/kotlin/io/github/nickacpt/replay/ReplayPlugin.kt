@@ -5,6 +5,7 @@ import cloud.commandframework.execution.CommandExecutionCoordinator
 import cloud.commandframework.paper.PaperCommandManager
 import io.github.nickacpt.behaviours.replay.ReplaySystem
 import io.github.nickacpt.replay.commands.TestCommands
+import io.github.nickacpt.replay.event.ReplayItemsListener
 import io.github.nickacpt.replay.event.ReplayWorldEventListener
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
 import org.bukkit.Bukkit
@@ -34,6 +35,8 @@ class ReplayPlugin : JavaPlugin() {
 
     override fun onEnable() {
         Bukkit.getPluginManager().registerEvents(ReplayWorldEventListener, this)
+        Bukkit.getPluginManager().registerEvents(ReplayItemsListener, this)
+
         annotationParser.parse(TestCommands)
 
         replaySystem.initialize()

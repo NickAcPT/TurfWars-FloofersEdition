@@ -3,6 +3,7 @@ package io.github.nickacpt.replay.platform
 import io.github.nickacpt.behaviours.replay.ReplaySystem
 import io.github.nickacpt.behaviours.replay.abstractions.EntityManager
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayPlatform
+import io.github.nickacpt.behaviours.replay.logic.ReplayControlItemType
 import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.playback.Replayer
 import io.github.nickacpt.behaviours.replay.playback.session.ReplaySession
@@ -124,7 +125,8 @@ class BukkitReplayerImpl :
             ReplaySessionState.FINISHED -> Component.text("Finished", NamedTextColor.RED)
         }
 
-        val time = displayTicks(replaySession.currentTick).color(NamedTextColor.YELLOW).append(Component.text(" / TOTAL", NamedTextColor.YELLOW))
+        val time = displayTicks(replaySession.currentTick).color(NamedTextColor.YELLOW)
+            .append(Component.text(" / TOTAL", NamedTextColor.YELLOW))
 
         val speed =
             Component.text("${"%.1f".format(replaySession.settings.currentPlaybackSpeed)}x", NamedTextColor.GOLD)
@@ -132,5 +134,24 @@ class BukkitReplayerImpl :
         val message = Component.join(JoinConfiguration.separator(space), state, time, speed)
 
         viewer.sendActionBar(message)
+    }
+
+    override fun updateReplaySessionViewerControls(
+        replaySession: ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>>,
+        viewer: BukkitReplayViewer
+    ) {
+        val items = mapOf(
+            2 to ReplayControlItemType.DECREASE_SPEED,
+            3 to ReplayControlItemType.STEP_BACKWARDS,
+            4 to ReplayControlItemType.RESUME,
+            5 to ReplayControlItemType.STEP_FORWARD,
+            6 to ReplayControlItemType.INCREASE_SPEED
+        )
+
+        val player = viewer.bukkitPlayer ?: return
+
+        items.forEach { item ->
+            player.inventory.setItem(item.key, ReplayItemStackUtils.createControlItemStack(item.value, replaySession))
+        }
     }
 }
