@@ -5,7 +5,7 @@ import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.playback.Replayer
 import io.github.nickacpt.behaviours.replay.playback.session.ReplaySession
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
-import io.github.nickacpt.replay.platform.abstractions.entity.BukkitRecordableReplayEntity
+import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.util.TriState
@@ -13,8 +13,8 @@ import org.bukkit.*
 import java.util.*
 
 class BukkitReplayerImpl :
-    Replayer<BukkitReplayViewer, BukkitRecordableReplayEntity, BukkitReplayPlatform,
-            ReplaySystem<BukkitReplayViewer, BukkitRecordableReplayEntity, BukkitReplayPlatform>> {
+    Replayer<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform,
+            ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>> {
 
     companion object {
         const val REPLAY_WORLD_NAME_PRFIX = "replay_world_"
@@ -22,32 +22,35 @@ class BukkitReplayerImpl :
 
     override fun prepareReplaySession(
         replay: Replay,
-        replaySession: ReplaySession<BukkitReplayViewer, BukkitRecordableReplayEntity, BukkitReplayPlatform,
-                ReplaySystem<BukkitReplayViewer, BukkitRecordableReplayEntity, BukkitReplayPlatform>>,
+        replaySession: ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform,
+                ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>>,
         replayViewers: List<BukkitReplayViewer>
-    ) {
-        val voidWorld = WorldCreator(REPLAY_WORLD_NAME_PRFIX + UUID.randomUUID().toString().replace("-", ""))
+    ): BukkitReplayWorld {
+        val world = WorldCreator(REPLAY_WORLD_NAME_PRFIX + UUID.randomUUID().toString().replace("-", ""))
             .type(WorldType.FLAT)
             .generatorSettings("{\"layers\":[{\"block\":\"air\",\"height\":1}],\"biome\":\"plains\"}")
             .keepSpawnLoaded(TriState.FALSE)
             .createWorld()
 
-        if (voidWorld == null) {
+        if (world == null) {
             replaySession.sendMessage(
                 Component.text(
                     "Unable to create a world to host the replay session.",
                     NamedTextColor.RED
                 )
             )
-            return
+
+            throw IllegalStateException("Unable to create a world to host the replay session.")
         }
 
         // TODO: Load chunks
-        voidWorld.setBlockData(0, 99, 0, Bukkit.createBlockData(Material.BEDROCK))
+        world.setBlockData(0, 99, 0, Bukkit.createBlockData(Material.BEDROCK))
 
         replayViewers.forEach {
-            setupReplayViewer(it, voidWorld)
+            setupReplayViewer(it, world)
         }
+
+        return BukkitReplayPlatform.convertIntoReplayWorld(world)
     }
 
     private fun setupReplayViewer(viewer: BukkitReplayViewer, world: World) {
@@ -59,5 +62,4 @@ class BukkitReplayerImpl :
             player.isFlying = true
         }
     }
-
 }
