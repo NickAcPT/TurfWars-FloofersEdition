@@ -3,11 +3,11 @@ package io.github.nickacpt.replay.platform
 import io.github.nickacpt.behaviours.replay.ReplaySystem
 import io.github.nickacpt.behaviours.replay.abstractions.*
 import io.github.nickacpt.behaviours.replay.model.Replay
+import io.github.nickacpt.behaviours.replay.model.standard.location.HasLook
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocation
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithLook
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithoutLook
 import io.github.nickacpt.behaviours.replay.playback.Replayer
-import io.github.nickacpt.behaviours.replay.playback.session.ReplaySession
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayerImpl
@@ -52,10 +52,14 @@ object BukkitReplayPlatform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWor
         )
     }
 
-    override fun <Platform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity>, System : ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform>, Session : ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform, System>> createEntityManager(
-        replaySystem: System,
-        replaySession: Session
-    ): EntityManager<BukkitReplayEntity> {
-        return BukkitEntityManager(replaySession)
+    fun convertIntoPlatformLocation(location: RecordableLocation, world: World) =
+        Location(world, 0.0, 0.0, 0.0).also { applyRecordableLocation(location, it) }
+
+    internal fun applyRecordableLocation(location: RecordableLocation, platform: Location) {
+        platform.set(location.x, location.y, location.z)
+        if (location is HasLook) {
+            platform.yaw = location.yaw
+            platform.pitch = location.pitch
+        }
     }
 }

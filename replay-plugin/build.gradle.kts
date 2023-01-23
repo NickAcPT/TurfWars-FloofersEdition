@@ -20,6 +20,8 @@ dependencies {
 bukkit {
     name = "Replay"
     main = "io.github.nickacpt.replay.ReplayPlugin"
+
+    depend = listOf("Citizens")
 }
 
 tasks.withType<ShadowJar> {

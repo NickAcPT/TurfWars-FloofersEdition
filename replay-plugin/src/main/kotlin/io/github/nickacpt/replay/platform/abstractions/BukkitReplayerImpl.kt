@@ -1,9 +1,12 @@
 package io.github.nickacpt.replay.platform.abstractions
 
 import io.github.nickacpt.behaviours.replay.ReplaySystem
+import io.github.nickacpt.behaviours.replay.abstractions.EntityManager
+import io.github.nickacpt.behaviours.replay.abstractions.ReplayPlatform
 import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.playback.Replayer
 import io.github.nickacpt.behaviours.replay.playback.session.ReplaySession
+import io.github.nickacpt.replay.platform.BukkitEntityManager
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
 import net.kyori.adventure.text.Component
@@ -51,6 +54,13 @@ class BukkitReplayerImpl :
         }
 
         return BukkitReplayPlatform.convertIntoReplayWorld(world)
+    }
+
+    override fun <Platform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity>, System : ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform>, Session : ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform, System>> createEntityManager(
+        replaySystem: System,
+        replaySession: Session
+    ): EntityManager<BukkitReplayEntity> {
+        return BukkitEntityManager(replaySession)
     }
 
     private fun setupReplayViewer(viewer: BukkitReplayViewer, world: World) {
