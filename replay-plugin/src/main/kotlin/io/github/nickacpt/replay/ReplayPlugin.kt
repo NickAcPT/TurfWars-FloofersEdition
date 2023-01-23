@@ -35,5 +35,7 @@ class ReplayPlugin : JavaPlugin() {
     override fun onEnable() {
         Bukkit.getPluginManager().registerEvents(ReplayWorldEventListener, this)
         annotationParser.parse(TestCommands)
+
+        replaySystem.initialize()
     }
 }

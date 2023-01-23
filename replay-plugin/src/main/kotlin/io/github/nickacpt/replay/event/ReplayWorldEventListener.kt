@@ -1,6 +1,6 @@
 package io.github.nickacpt.replay.event
 
-import io.github.nickacpt.replay.platform.abstractions.BukkitReplayerImpl
+import io.github.nickacpt.replay.platform.BukkitReplayerImpl
 import org.bukkit.GameRule
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority

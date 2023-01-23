@@ -8,10 +8,11 @@ import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLo
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithLook
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithoutLook
 import io.github.nickacpt.behaviours.replay.playback.Replayer
+import io.github.nickacpt.replay.ReplayPlugin
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
-import io.github.nickacpt.replay.platform.abstractions.BukkitReplayerImpl
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.entity.Entity
@@ -61,5 +62,9 @@ object BukkitReplayPlatform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWor
             platform.yaw = location.yaw
             platform.pitch = location.pitch
         }
+    }
+
+    override fun registerRepeatingTask(delay: Long, task: () -> Unit) {
+        Bukkit.getScheduler().runTaskTimer(ReplayPlugin.instance, task, 0, delay)
     }
 }
