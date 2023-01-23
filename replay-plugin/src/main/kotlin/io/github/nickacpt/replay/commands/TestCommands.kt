@@ -3,12 +3,14 @@ package io.github.nickacpt.replay.commands
 import cloud.commandframework.annotations.CommandMethod
 import io.github.nickacpt.behaviours.replay.model.RecordedReplayEntity
 import io.github.nickacpt.behaviours.replay.model.Replay
+import io.github.nickacpt.behaviours.replay.model.metadata.def.ReplayRecordingInformation
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithLook
 import io.github.nickacpt.replay.ReplayPlugin
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
 import io.github.nickacpt.replay.platform.abstractions.entity.PlayerEntityData
 import io.github.nickacpt.replay.platform.abstractions.entity.PlayerGameProfile
 import org.bukkit.entity.Player
+import java.time.Instant
 import java.util.*
 
 object TestCommands {
@@ -39,7 +41,13 @@ object TestCommands {
             )
         )
 
-        val replay = Replay(UUID.randomUUID(), listOf(entity), mutableMapOf(), listOf())
+        val replay = Replay(
+            UUID.randomUUID(), listOf(entity), mutableMapOf(
+                ReplayPlugin.replaySystem.defaultMetadataKeys!!.recordingInformation to ReplayRecordingInformation(
+                    Instant.now()
+                )
+            ), listOf()
+        )
         ReplayPlugin.replaySystem.createReplaySession(
             replay,
             listOf(BukkitReplayPlatform.convertIntoReplayViewer(player))

@@ -1,6 +1,6 @@
 package io.github.nickacpt.replay.platform
 
-import io.github.nickacpt.behaviours.replay.items.ReplayControlItemType
+import io.github.nickacpt.behaviours.replay.logic.ReplayControlItemType
 import io.github.nickacpt.replay.ReplayPlugin
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
