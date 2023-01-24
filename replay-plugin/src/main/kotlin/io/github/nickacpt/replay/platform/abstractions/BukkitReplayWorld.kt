@@ -4,6 +4,7 @@ import io.github.nickacpt.behaviours.replay.ReplaySystem
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayEntity
 import io.github.nickacpt.behaviours.replay.abstractions.ReplayWorld
 import io.github.nickacpt.behaviours.replay.playback.session.ReplaySession
+import io.github.nickacpt.behaviours.replay.record.ReplayRecorder
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
 import org.bukkit.Bukkit
@@ -18,6 +19,14 @@ data class BukkitReplayWorld(override val id: UUID) : ReplayWorld {
             ?.map { BukkitReplayPlatform.convertIntoReplayEntity(it) } ?: emptyList()
 
     var session: ReplaySession<
+            BukkitReplayWorld,
+            BukkitReplayViewer,
+            BukkitReplayEntity,
+            BukkitReplayPlatform,
+            ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>
+            >? = null
+
+    var recorder: ReplayRecorder<
             BukkitReplayWorld,
             BukkitReplayViewer,
             BukkitReplayEntity,

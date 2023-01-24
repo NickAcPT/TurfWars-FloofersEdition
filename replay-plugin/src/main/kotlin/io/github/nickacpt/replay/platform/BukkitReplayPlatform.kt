@@ -8,6 +8,8 @@ import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLo
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithLook
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithoutLook
 import io.github.nickacpt.behaviours.replay.playback.Replayer
+import io.github.nickacpt.behaviours.replay.record.RecordingConfiguration
+import io.github.nickacpt.behaviours.replay.record.ReplayRecorder
 import io.github.nickacpt.replay.ReplayPlugin
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
@@ -70,5 +72,21 @@ object BukkitReplayPlatform : ReplayPlatform<BukkitReplayWorld, BukkitReplayView
 
     override fun registerRepeatingTask(delay: Long, task: () -> Unit) {
         Bukkit.getScheduler().runTaskTimer(ReplayPlugin.instance, task, 0, delay)
+    }
+
+    override fun <Platform : ReplayPlatform<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity>, System : ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform>> createReplayRecorder(
+        replaySystem: System,
+        world: BukkitReplayWorld,
+        entities: List<BukkitReplayEntity>,
+        configuration: RecordingConfiguration
+    ): ReplayRecorder<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform, System> {
+        @Suppress("UNCHECKED_CAST")
+        return BukkitReplayRecorderImpl(
+            world,
+            replaySystem as ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>,
+            entities
+        ).also {
+            Bukkit.getPluginManager().registerEvents(it, ReplayPlugin.instance)
+        } as ReplayRecorder<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform, System>
     }
 }

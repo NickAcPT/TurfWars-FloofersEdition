@@ -8,6 +8,8 @@ import io.github.nickacpt.replay.commands.TestCommands
 import io.github.nickacpt.replay.event.ReplayItemsListener
 import io.github.nickacpt.replay.event.ReplayWorldEventListener
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
+import io.github.nickacpt.replay.platform.recordables.PlayerStateRecordable
+import io.github.nickacpt.replay.platform.recordables.players.PlayerStateRecordablePlayer
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
@@ -20,7 +22,7 @@ class ReplayPlugin : JavaPlugin() {
         val instance get() = getPlugin(ReplayPlugin::class.java)
     }
 
-    val commandManager by lazy {
+    private val commandManager by lazy {
         PaperCommandManager(
             this,
             CommandExecutionCoordinator.simpleCoordinator(),
@@ -29,7 +31,7 @@ class ReplayPlugin : JavaPlugin() {
         )
     }
 
-    val annotationParser by lazy {
+    private val annotationParser by lazy {
         AnnotationParser(commandManager, CommandSender::class.java) { commandManager.createDefaultCommandMeta() }
     }
 
@@ -39,6 +41,12 @@ class ReplayPlugin : JavaPlugin() {
 
         annotationParser.parse(TestCommands)
 
-        replaySystem.initialize()
+        replaySystem.apply {
+            registerRecordablePlayer(PlayerStateRecordable.Animation::class.java, PlayerStateRecordablePlayer())
+            registerRecordablePlayer(PlayerStateRecordable.SneakState::class.java, PlayerStateRecordablePlayer())
+            registerRecordablePlayer(PlayerStateRecordable.SprintState::class.java, PlayerStateRecordablePlayer())
+
+            initialize()
+        }
     }
 }
