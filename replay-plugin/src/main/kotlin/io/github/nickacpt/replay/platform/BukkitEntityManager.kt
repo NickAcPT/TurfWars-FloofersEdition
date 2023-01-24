@@ -10,6 +10,7 @@ import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
 import io.github.nickacpt.replay.platform.abstractions.entity.PlayerEntityData
+import io.github.nickacpt.replay.platform.utils.NmsUtils
 import io.github.nickacpt.replay.platform.utils.PlayerNameSplittingHelper
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.event.SpawnReason
@@ -20,6 +21,7 @@ import net.citizensnpcs.trait.SkinTrait
 import net.citizensnpcs.util.NMS
 import net.citizensnpcs.util.Util
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.EntityType
 import org.bukkit.event.player.PlayerTeleportEvent
 import java.util.concurrent.ConcurrentHashMap
@@ -63,7 +65,7 @@ class BukkitEntityManager<
 
             session.world.bukkitWorld?.players?.forEach { player ->
                 if (player.hasMetadata("NPC")) return@forEach
-                NMS.sendTeamPacket(player, team, 0)
+                NmsUtils.sendTeamPacket(player, "npc_${name.name}", null, Component.text(name.rest), NamedTextColor.RED, listOf(name.name))
             }
 
             return BukkitReplayEntity(npc.entity)

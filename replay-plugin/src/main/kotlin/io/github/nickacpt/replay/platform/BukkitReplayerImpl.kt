@@ -12,6 +12,7 @@ import io.github.nickacpt.behaviours.replay.utils.displayTicks
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
+import io.github.nickacpt.replay.platform.utils.NmsUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.NamedTextColor
@@ -58,7 +59,7 @@ class BukkitReplayerImpl :
         }
 
         replayViewers.forEach {
-            setupReplayViewer(it, world)
+            setupReplayViewer(it, world, replayViewers)
         }
 
         return BukkitReplayPlatform.convertIntoReplayWorld(world).also {
@@ -73,10 +74,23 @@ class BukkitReplayerImpl :
         return BukkitEntityManager(replaySession)
     }
 
-    private fun setupReplayViewer(viewer: BukkitReplayViewer, world: World) {
+    private fun setupReplayViewer(viewer: BukkitReplayViewer, world: World, viewers: List<BukkitReplayViewer>) {
         val player = viewer.bukkitPlayer ?: return
 
         player.teleport(Location(world, 0.0, 75.0, 0.0))
+
+        viewers.forEach {
+            val otherPlayer = it.bukkitPlayer ?: return@forEach
+
+            NmsUtils.sendTeamPacket(
+                otherPlayer,
+                "v_${player.uniqueId.hashCode()}",
+                Component.text("[Viewer] ", NamedTextColor.GRAY),
+                null,
+                NamedTextColor.GRAY,
+                listOf(player.name)
+            )
+        }
 
         run {
             player.gameMode = GameMode.ADVENTURE

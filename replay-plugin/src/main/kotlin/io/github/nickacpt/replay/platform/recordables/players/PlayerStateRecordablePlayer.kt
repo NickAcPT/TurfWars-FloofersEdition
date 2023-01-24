@@ -8,14 +8,13 @@ import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
 import io.github.nickacpt.replay.platform.recordables.PlayerStateRecordable
-import net.citizensnpcs.util.NMS
 import net.citizensnpcs.util.PlayerAnimation
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerAnimationType
 
-class PlayerStateRecordablePlayer<System: ReplaySystem<BukkitReplayWorld, BukkitReplayViewer,
+class PlayerStateRecordablePlayer<System : ReplaySystem<BukkitReplayWorld, BukkitReplayViewer,
         BukkitReplayEntity, BukkitReplayPlatform>,
-        Session: ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform, System>
+        Session : ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform, System>
         > : EntityRecordablePlayer<BukkitReplayWorld, BukkitReplayViewer,
         BukkitReplayEntity, BukkitReplayPlatform, System, Session, PlayerStateRecordable> {
 
@@ -26,12 +25,16 @@ class PlayerStateRecordablePlayer<System: ReplaySystem<BukkitReplayWorld, Bukkit
             is PlayerStateRecordable.SprintState -> {
                 bukkitEntity.isSprinting = recordable.isSprinting
             }
+
             is PlayerStateRecordable.Animation -> {
-                val animation = if (recordable.hand == PlayerAnimationType.ARM_SWING) PlayerAnimation.ARM_SWING else PlayerAnimation.ARM_SWING_OFFHAND
-                NMS.playAnimation(animation, bukkitEntity, 25)
+                val animation =
+                    if (recordable.hand == PlayerAnimationType.ARM_SWING) PlayerAnimation.ARM_SWING else PlayerAnimation.ARM_SWING_OFFHAND
+                animation.play(bukkitEntity)
             }
+
             is PlayerStateRecordable.SneakState -> {
-                NMS.setSneaking(bukkitEntity, recordable.isSneaking)
+                val animation = if (recordable.isSneaking) PlayerAnimation.SNEAK else PlayerAnimation.STOP_SNEAKING
+                animation.play(bukkitEntity)
             }
         }
     }
