@@ -8,6 +8,7 @@ import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.playback.Replayer
 import io.github.nickacpt.behaviours.replay.playback.session.ReplaySession
 import io.github.nickacpt.behaviours.replay.playback.session.ReplaySessionState
+import io.github.nickacpt.behaviours.replay.utils.displayTicks
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
@@ -24,10 +25,6 @@ class BukkitReplayerImpl :
 
     companion object {
         const val REPLAY_WORLD_NAME_PRFIX = "replay_world_"
-
-        private const val TICKS_PER_SECOND = 20uL
-        private const val SECONDS_PER_MINUTE = 60uL
-        private const val MINUTES_PER_HOUR = 60uL
     }
 
     override fun prepareReplaySession(
@@ -54,7 +51,11 @@ class BukkitReplayerImpl :
         }
 
         // TODO: Load chunks
-        world.setBlockData(0, 99, 0, Bukkit.createBlockData(Material.BEDROCK))
+        for (x in -5..5) {
+            for (z in -5..5) {
+                world.setBlockData(x, 74, z, Bukkit.createBlockData(Material.BEDROCK))
+            }
+        }
 
         replayViewers.forEach {
             setupReplayViewer(it, world)
@@ -75,45 +76,13 @@ class BukkitReplayerImpl :
     private fun setupReplayViewer(viewer: BukkitReplayViewer, world: World) {
         val player = viewer.bukkitPlayer ?: return
 
-        player.teleport(Location(world, 0.0, 100.0, 0.0))
+        player.teleport(Location(world, 0.0, 75.0, 0.0))
 
         run {
             player.gameMode = GameMode.ADVENTURE
             player.allowFlight = true
             player.isFlying = true
         }
-    }
-
-    /**
-     * Formats the given number of ticks into hours, minutes and seconds.
-     *
-     * @param ticks The number of ticks to format
-     * @return The formatted time in hh:mm:ss format
-     */
-    fun displayTicks(ticks: ULong): Component {
-        val ticksPerMinute = TICKS_PER_SECOND * SECONDS_PER_MINUTE
-
-        // Convert ticks to minutes
-        val minutes = ticks / ticksPerMinute
-        // Get the remaining seconds by using the modulo operator
-        val seconds = (ticks % ticksPerMinute) / TICKS_PER_SECOND
-
-        // Calculate the number of hours from the total number of minutes
-        val hours = minutes / MINUTES_PER_HOUR
-
-        // Calculate the remaining minutes after the hours have been extracted
-        val finalMinutes = minutes % MINUTES_PER_HOUR
-
-        val timeComponents = buildList {
-            if (hours > 0u) add(hours)
-            add(finalMinutes)
-            add(seconds)
-        }
-
-        return Component.join(
-            JoinConfiguration.separator(Component.text(":")),
-            timeComponents.map { Component.text("%02d".format(it.toLong())) }
-        )
     }
 
     override fun updateReplaySessionStateForViewer(
@@ -139,16 +108,24 @@ class BukkitReplayerImpl :
         val message = Component.join(JoinConfiguration.separator(space), state, time, speed)
 
         viewer.sendActionBar(message)
+
+        viewer.bukkitPlayer?.sendExperienceChange(replaySession.currentTick.toFloat() / replaySession.replay.duration.toFloat())
     }
 
     override fun updateReplaySessionViewerControls(
         replaySession: ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>>,
         viewer: BukkitReplayViewer
     ) {
+        val stateItem = when (replaySession.state) {
+            ReplaySessionState.PAUSED -> ReplayControlItemType.RESUME
+            ReplaySessionState.FINISHED -> ReplayControlItemType.RESTART
+            else -> ReplayControlItemType.PAUSE
+        }
+
         val items = mapOf(
             2 to ReplayControlItemType.DECREASE_SPEED,
             3 to ReplayControlItemType.STEP_BACKWARDS,
-            4 to ReplayControlItemType.RESUME,
+            4 to stateItem,
             5 to ReplayControlItemType.STEP_FORWARD,
             6 to ReplayControlItemType.INCREASE_SPEED
         )

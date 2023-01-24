@@ -14,12 +14,15 @@ import io.github.nickacpt.replay.platform.utils.PlayerNameSplittingHelper
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.event.SpawnReason
 import net.citizensnpcs.api.npc.MemoryNPCDataStore
+import net.citizensnpcs.npc.ai.NPCHolder
 import net.citizensnpcs.trait.Gravity
 import net.citizensnpcs.trait.SkinTrait
 import net.citizensnpcs.util.NMS
 import net.citizensnpcs.util.Util
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.EntityType
+import org.bukkit.event.player.PlayerTeleportEvent
+import java.util.concurrent.ConcurrentHashMap
 
 class BukkitEntityManager<
         Platform : ReplayPlatform<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity>,
@@ -28,6 +31,7 @@ class BukkitEntityManager<
         >(private val session: Session) : EntityManager<BukkitReplayEntity> {
 
     private val npcRegistry = CitizensAPI.createAnonymousNPCRegistry(MemoryNPCDataStore())
+    override val entityMap: MutableMap<Int, BukkitReplayEntity> = ConcurrentHashMap()
 
     override fun spawnEntity(entity: RecordedReplayEntity, location: RecordableLocation): BukkitReplayEntity {
         val world = session.world.bukkitWorld ?: throw IllegalStateException("World is not loaded")
@@ -74,7 +78,14 @@ class BukkitEntityManager<
 
     override fun updateEntityPosition(entity: BukkitReplayEntity, location: RecordableLocation) {
         val bukkitEntity = entity.bukkitEntity ?: return
+        val location = bukkitEntity.location.apply { BukkitReplayPlatform.applyRecordableLocation(location, this) }
 
-        BukkitReplayPlatform.applyRecordableLocation(location, bukkitEntity.location)
+        if (bukkitEntity is NPCHolder) {
+            bukkitEntity.npc?.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN)
+            NMS.look(bukkitEntity, location.yaw, location.pitch)
+            NMS.setBodyYaw(bukkitEntity, location.yaw)
+        } else {
+            bukkitEntity.teleport(location)
+        }
     }
 }
