@@ -31,7 +31,7 @@ object BukkitReplayPlatform : ReplayPlatform<BukkitReplayWorld, BukkitReplayView
     }
 
     fun convertIntoReplayEntity(entity: Entity): BukkitReplayEntity {
-        return BukkitReplayEntity(entity)
+        return BukkitReplayEntity.BukkitEntity(entity)
     }
 
     fun convertIntoReplayWorld(world: World): BukkitReplayWorld {

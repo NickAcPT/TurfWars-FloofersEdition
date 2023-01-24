@@ -5,19 +5,12 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-repositories {
-    maven("https://maven.citizensnpcs.co/repo")
-}
-
 dependencies {
     paperDevBundle("1.19.3-R0.1-SNAPSHOT")
     implementation("io.github.nickacpt.behaviours:replay")
     compileOnly(library("com.esotericsoftware:kryo:5.4.0")!!)
     compileOnly(library("cloud.commandframework", "cloud-paper", "1.8.0"))
     compileOnly(library("cloud.commandframework", "cloud-annotations", "1.8.0"))
-    compileOnly("net.citizensnpcs", "citizens-main", "2.0.30-SNAPSHOT") {
-        exclude(group = "*", module = "*")
-    }
 }
 
 tasks {
@@ -42,8 +35,6 @@ tasks {
 bukkit {
     name = "Replay"
     main = "io.github.nickacpt.replay.ReplayPlugin"
-
-    depend = listOf("Citizens")
 }
 
 tasks.withType<ShadowJar> {

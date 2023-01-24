@@ -18,10 +18,13 @@ object PlayerNameSplittingHelper {
      * @return A pair containing the split name and rest
      */
     fun splitName(name: String): PlayerNameSplitData {
+        val splitLocation = (name.length - 1).coerceAtMost(npcMaxNameSize)
+        val taken = splitLocation + npcNameSuffix.length
+
         val finalName = StringBuilder(name).apply {
-            insert(name.length.coerceAtMost(npcMaxNameSize), npcNameSuffix)
+            insert(splitLocation, npcNameSuffix)
         }.toString()
 
-        return PlayerNameSplitData(finalName.take(maxNameSize), finalName.drop(maxNameSize))
+        return PlayerNameSplitData(finalName.take(taken), finalName.drop(taken))
     }
 }

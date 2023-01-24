@@ -43,8 +43,14 @@ class ReplayPlugin : JavaPlugin() {
 
         replaySystem.apply {
             registerRecordablePlayer(PlayerStateRecordable.Animation::class.java, PlayerStateRecordablePlayer())
+            registerRecordablePlayer(PlayerStateRecordable.PoseState::class.java, PlayerStateRecordablePlayer())
+            registerRecordablePlayer(PlayerStateRecordable.SkinParts::class.java, PlayerStateRecordablePlayer())
             registerRecordablePlayer(PlayerStateRecordable.SneakState::class.java, PlayerStateRecordablePlayer())
             registerRecordablePlayer(PlayerStateRecordable.SprintState::class.java, PlayerStateRecordablePlayer())
+
+            registerRecordableDefaultProvider(PlayerStateRecordable.PoseState)
+            registerRecordableDefaultProvider(PlayerStateRecordable.SneakState)
+            registerRecordableDefaultProvider(PlayerStateRecordable.SprintState)
 
             initialize()
         }

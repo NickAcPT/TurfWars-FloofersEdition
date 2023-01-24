@@ -8,9 +8,6 @@ import io.github.nickacpt.replay.platform.abstractions.BukkitReplayViewer
 import io.github.nickacpt.replay.platform.abstractions.BukkitReplayWorld
 import io.github.nickacpt.replay.platform.abstractions.entity.BukkitReplayEntity
 import io.github.nickacpt.replay.platform.recordables.PlayerStateRecordable
-import net.citizensnpcs.util.PlayerAnimation
-import org.bukkit.entity.Player
-import org.bukkit.event.player.PlayerAnimationType
 
 class PlayerStateRecordablePlayer<System : ReplaySystem<BukkitReplayWorld, BukkitReplayViewer,
         BukkitReplayEntity, BukkitReplayPlatform>,
@@ -19,23 +16,15 @@ class PlayerStateRecordablePlayer<System : ReplaySystem<BukkitReplayWorld, Bukki
         BukkitReplayEntity, BukkitReplayPlatform, System, Session, PlayerStateRecordable> {
 
     override fun Session.play(tick: ULong, recordable: PlayerStateRecordable, entity: BukkitReplayEntity) {
-        val bukkitEntity = entity.bukkitEntity as? Player ?: return
+        if (entity !is BukkitReplayEntity.FakePlayer) return
 
         when (recordable) {
-            is PlayerStateRecordable.SprintState -> {
-                bukkitEntity.isSprinting = recordable.isSprinting
-            }
-
-            is PlayerStateRecordable.Animation -> {
-                val animation =
-                    if (recordable.hand == PlayerAnimationType.ARM_SWING) PlayerAnimation.ARM_SWING else PlayerAnimation.ARM_SWING_OFFHAND
-                animation.play(bukkitEntity)
-            }
-
-            is PlayerStateRecordable.SneakState -> {
-                val animation = if (recordable.isSneaking) PlayerAnimation.SNEAK else PlayerAnimation.STOP_SNEAKING
-                animation.play(bukkitEntity)
-            }
+            is PlayerStateRecordable.Animation -> entity.swingHand(recordable.hand)
+            is PlayerStateRecordable.PoseState -> entity.setPose(recordable.pose)
+            is PlayerStateRecordable.SkinParts -> entity.setSkinParts(recordable.skinParts, true)
+            is PlayerStateRecordable.SneakState -> entity.setIsSneaking(recordable.isSneaking)
+            is PlayerStateRecordable.SprintState -> entity.setIsSprinting(recordable.isSprinting)
         }
+
     }
 }
