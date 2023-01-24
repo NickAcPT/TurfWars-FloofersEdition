@@ -25,7 +25,8 @@ object ReplayItemStackUtils {
 
     fun createControlItemStack(
         control: ReplayControlItemType,
-        session: ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>>
+        session: ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform,
+                ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>>
     ): ItemStack {
         val material = when (control) {
             ReplayControlItemType.PAUSE -> Material.PINK_DYE
@@ -44,8 +45,8 @@ object ReplayItemStackUtils {
                 ReplayControlItemType.RESTART -> "Play recording again"
                 ReplayControlItemType.STEP_FORWARD -> "${session.settings.currentStepSize.inWholeSeconds}s Forward"
                 ReplayControlItemType.INCREASE_SPEED -> "Increase Speed"
-            }
-        , NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+            }, NamedTextColor.GREEN
+        ).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
 
         return ItemStack(material, 1).apply {
             val itemSkin = when (control) {
@@ -74,7 +75,12 @@ object ReplayItemStackUtils {
                 }
 
                 it.displayName(title)
-                if (lore != null) it.lore(listOf(Component.text(lore, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)))
+                if (lore != null) it.lore(
+                    listOf(
+                        Component.text(lore, NamedTextColor.GRAY)
+                            .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+                    )
+                )
             }
 
             this.controlType = control

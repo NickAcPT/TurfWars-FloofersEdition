@@ -19,8 +19,8 @@ import org.bukkit.*
 import java.util.*
 
 class BukkitReplayerImpl :
-    Replayer<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform,
-            ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>> {
+    Replayer<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform,
+            ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>> {
 
     companion object {
         const val REPLAY_WORLD_NAME_PRFIX = "replay_world_"
@@ -32,8 +32,8 @@ class BukkitReplayerImpl :
 
     override fun prepareReplaySession(
         replay: Replay,
-        replaySession: ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform,
-                ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>>,
+        replaySession: ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform,
+                ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>>,
         replayViewers: List<BukkitReplayViewer>
     ): BukkitReplayWorld {
         val world = WorldCreator(REPLAY_WORLD_NAME_PRFIX + UUID.randomUUID().toString().replace("-", ""))
@@ -60,10 +60,12 @@ class BukkitReplayerImpl :
             setupReplayViewer(it, world)
         }
 
-        return BukkitReplayPlatform.convertIntoReplayWorld(world)
+        return BukkitReplayPlatform.convertIntoReplayWorld(world).also {
+            it.session = replaySession
+        }
     }
 
-    override fun <Platform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity>, System : ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform>, Session : ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform, System>> createEntityManager(
+    override fun <Platform : ReplayPlatform<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity>, System : ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform>, Session : ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform, System>> createEntityManager(
         replaySystem: System,
         replaySession: Session
     ): EntityManager<BukkitReplayEntity> {
@@ -73,7 +75,9 @@ class BukkitReplayerImpl :
     private fun setupReplayViewer(viewer: BukkitReplayViewer, world: World) {
         val player = viewer.bukkitPlayer ?: return
 
-        player.teleportAsync(Location(world, 0.0, 100.0, 0.0)).thenAccept {
+        player.teleport(Location(world, 0.0, 100.0, 0.0))
+
+        run {
             player.gameMode = GameMode.ADVENTURE
             player.allowFlight = true
             player.isFlying = true
@@ -113,7 +117,7 @@ class BukkitReplayerImpl :
     }
 
     override fun updateReplaySessionStateForViewer(
-        replaySession: ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>>,
+        replaySession: ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>>,
         viewer: BukkitReplayViewer
     ) {
         val space = Component.text(" ".repeat(6), NamedTextColor.WHITE)
@@ -137,7 +141,7 @@ class BukkitReplayerImpl :
     }
 
     override fun updateReplaySessionViewerControls(
-        replaySession: ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, BukkitReplayPlatform>>,
+        replaySession: ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform, ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, BukkitReplayPlatform>>,
         viewer: BukkitReplayViewer
     ) {
         val items = mapOf(

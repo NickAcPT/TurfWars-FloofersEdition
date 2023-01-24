@@ -17,11 +17,15 @@ import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import java.util.*
 
-object BukkitReplayPlatform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity> {
+object BukkitReplayPlatform : ReplayPlatform<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity> {
+
+    private val viewerCache = mutableMapOf<UUID, BukkitReplayViewer>()
+    private val worldCache = mutableMapOf<UUID, BukkitReplayWorld>()
 
     fun convertIntoReplayViewer(viewer: Player): BukkitReplayViewer {
-        return BukkitReplayViewer(viewer.uniqueId)
+        return viewerCache.getOrPut(viewer.uniqueId) { BukkitReplayViewer(viewer.uniqueId) }
     }
 
     fun convertIntoReplayEntity(entity: Entity): ReplayEntity {
@@ -29,16 +33,16 @@ object BukkitReplayPlatform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWor
     }
 
     fun convertIntoReplayWorld(world: World): BukkitReplayWorld {
-        return BukkitReplayWorld(world.uid)
+        return worldCache.getOrPut(world.uid) { BukkitReplayWorld(world.uid) }
     }
 
-    override fun <Platform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity>,
-            System : ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform>> createReplayer(
+    override fun <Platform : ReplayPlatform<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity>,
+            System : ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform>> createReplayer(
         replaySystem: System,
         replay: Replay
-    ): Replayer<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform, System> {
+    ): Replayer<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform, System> {
         @Suppress("UNCHECKED_CAST")
-        return BukkitReplayerImpl() as Replayer<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform, System>
+        return BukkitReplayerImpl() as Replayer<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform, System>
     }
 
     fun convertIntoReplayLocation(location: Location?): RecordableLocation {

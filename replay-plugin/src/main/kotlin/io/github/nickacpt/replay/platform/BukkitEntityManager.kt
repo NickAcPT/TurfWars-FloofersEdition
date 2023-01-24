@@ -21,9 +21,9 @@ import net.kyori.adventure.text.Component
 import org.bukkit.entity.EntityType
 
 class BukkitEntityManager<
-        Platform : ReplayPlatform<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity>,
-        System : ReplaySystem<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform>,
-        Session : ReplaySession<BukkitReplayViewer, BukkitReplayWorld, BukkitReplayEntity, Platform, System>,
+        Platform : ReplayPlatform<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity>,
+        System : ReplaySystem<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform>,
+        Session : ReplaySession<BukkitReplayWorld, BukkitReplayViewer, BukkitReplayEntity, Platform, System>,
         >(private val session: Session) : EntityManager<BukkitReplayEntity> {
 
     private val npcRegistry = CitizensAPI.createAnonymousNPCRegistry(MemoryNPCDataStore())
