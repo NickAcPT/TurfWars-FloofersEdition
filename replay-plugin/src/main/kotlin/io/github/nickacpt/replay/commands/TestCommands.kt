@@ -5,6 +5,7 @@ import cloud.commandframework.annotations.ProxiedBy
 import io.github.nickacpt.behaviours.replay.model.RecordedReplayEntity
 import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.model.metadata.def.ReplayRecordingInformation
+import io.github.nickacpt.behaviours.replay.model.standard.EndingRecordable
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithLook
 import io.github.nickacpt.behaviours.replay.record.ReplayRecorder
 import io.github.nickacpt.replay.ReplayPlugin
@@ -66,7 +67,7 @@ object TestCommands {
                     ReplayPlugin.replaySystem.defaultMetadataKeys!!.recordingInformation to ReplayRecordingInformation(
                         Instant.now()
                     )
-                ), listOf()
+                ), mapOf(0uL to listOf(EndingRecordable))
             )
         }
 

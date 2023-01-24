@@ -25,9 +25,9 @@ class BukkitReplayerImpl :
     companion object {
         const val REPLAY_WORLD_NAME_PRFIX = "replay_world_"
 
-        private const val TICKS_PER_SECOND = 20
-        private const val SECONDS_PER_MINUTE = 60
-        private const val MINUTES_PER_HOUR = 60
+        private const val TICKS_PER_SECOND = 20uL
+        private const val SECONDS_PER_MINUTE = 60uL
+        private const val MINUTES_PER_HOUR = 60uL
     }
 
     override fun prepareReplaySession(
@@ -90,7 +90,7 @@ class BukkitReplayerImpl :
      * @param ticks The number of ticks to format
      * @return The formatted time in hh:mm:ss format
      */
-    fun displayTicks(ticks: Long): Component {
+    fun displayTicks(ticks: ULong): Component {
         val ticksPerMinute = TICKS_PER_SECOND * SECONDS_PER_MINUTE
 
         // Convert ticks to minutes
@@ -105,14 +105,14 @@ class BukkitReplayerImpl :
         val finalMinutes = minutes % MINUTES_PER_HOUR
 
         val timeComponents = buildList {
-            if (hours > 0) add(hours)
+            if (hours > 0u) add(hours)
             add(finalMinutes)
             add(seconds)
         }
 
         return Component.join(
             JoinConfiguration.separator(Component.text(":")),
-            timeComponents.map { Component.text("%02d".format(it)) }
+            timeComponents.map { Component.text("%02d".format(it.toLong())) }
         )
     }
 
@@ -131,7 +131,7 @@ class BukkitReplayerImpl :
 
         val time = displayTicks(replaySession.currentTick).color(NamedTextColor.YELLOW)
             .append(Component.text(" / ", NamedTextColor.YELLOW))
-            .append(displayTicks(replaySession.replay.duration.inWholeSeconds * 20).color(NamedTextColor.YELLOW))
+            .append(displayTicks(replaySession.replay.duration).color(NamedTextColor.YELLOW))
 
         val speed =
             Component.text("${"%.1f".format(replaySession.settings.currentPlaybackSpeed)}x", NamedTextColor.GOLD)
