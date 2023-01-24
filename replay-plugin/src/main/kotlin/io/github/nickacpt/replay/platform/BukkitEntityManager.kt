@@ -14,6 +14,7 @@ import io.github.nickacpt.replay.platform.utils.PlayerNameSplittingHelper
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.event.SpawnReason
 import net.citizensnpcs.api.npc.MemoryNPCDataStore
+import net.citizensnpcs.trait.Gravity
 import net.citizensnpcs.trait.SkinTrait
 import net.citizensnpcs.util.NMS
 import net.citizensnpcs.util.Util
@@ -39,6 +40,10 @@ class BukkitEntityManager<
 
             npc.getOrAddTrait(SkinTrait::class.java).apply {
                 setTexture(data.profile.textures, data.profile.signature)
+            }
+
+            npc.getOrAddTrait(Gravity::class.java).apply {
+                gravitate(true)
             }
 
             npc.data().set("removefromtablist", false)

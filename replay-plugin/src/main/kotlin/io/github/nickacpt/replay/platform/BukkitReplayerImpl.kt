@@ -130,7 +130,8 @@ class BukkitReplayerImpl :
         }
 
         val time = displayTicks(replaySession.currentTick).color(NamedTextColor.YELLOW)
-            .append(Component.text(" / TOTAL", NamedTextColor.YELLOW))
+            .append(Component.text(" / ", NamedTextColor.YELLOW))
+            .append(displayTicks(replaySession.replay.duration.inWholeSeconds * 20).color(NamedTextColor.YELLOW))
 
         val speed =
             Component.text("${"%.1f".format(replaySession.settings.currentPlaybackSpeed)}x", NamedTextColor.GOLD)

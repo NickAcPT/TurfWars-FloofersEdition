@@ -28,7 +28,7 @@ object BukkitReplayPlatform : ReplayPlatform<BukkitReplayWorld, BukkitReplayView
         return viewerCache.getOrPut(viewer.uniqueId) { BukkitReplayViewer(viewer.uniqueId) }
     }
 
-    fun convertIntoReplayEntity(entity: Entity): ReplayEntity {
+    fun convertIntoReplayEntity(entity: Entity): BukkitReplayEntity {
         return BukkitReplayEntity(entity)
     }
 

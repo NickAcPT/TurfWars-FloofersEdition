@@ -1,10 +1,12 @@
 package io.github.nickacpt.replay.commands
 
 import cloud.commandframework.annotations.CommandMethod
+import cloud.commandframework.annotations.ProxiedBy
 import io.github.nickacpt.behaviours.replay.model.RecordedReplayEntity
 import io.github.nickacpt.behaviours.replay.model.Replay
 import io.github.nickacpt.behaviours.replay.model.metadata.def.ReplayRecordingInformation
 import io.github.nickacpt.behaviours.replay.model.standard.location.RecordableLocationWithLook
+import io.github.nickacpt.behaviours.replay.record.ReplayRecorder
 import io.github.nickacpt.replay.ReplayPlugin
 import io.github.nickacpt.replay.platform.BukkitReplayPlatform
 import io.github.nickacpt.replay.platform.abstractions.entity.PlayerEntityData
@@ -13,9 +15,26 @@ import org.bukkit.entity.Player
 import java.time.Instant
 import java.util.*
 
+@CommandMethod("test")
 object TestCommands {
 
-    @CommandMethod("test")
+    private var replay: Replay? = null
+    private var recorder: ReplayRecorder<*, *, *, *, *>? = null
+
+    @CommandMethod("record")
+    fun record(player: Player) {
+        recorder = ReplayPlugin.replaySystem.createReplayRecorder(
+            listOf(BukkitReplayPlatform.convertIntoReplayEntity(player)),
+        )
+        replay = recorder!!.replay
+    }
+    @CommandMethod("stop")
+    fun stop(player: Player) {
+        recorder?.stopRecording()
+    }
+
+    @ProxiedBy("test")
+    @CommandMethod("play")
     fun test(player: Player) {
         val entity = RecordedReplayEntity(
             1,
@@ -41,15 +60,18 @@ object TestCommands {
             )
         )
 
-        val replay = Replay(
-            UUID.randomUUID(), listOf(entity), mutableMapOf(
-                ReplayPlugin.replaySystem.defaultMetadataKeys!!.recordingInformation to ReplayRecordingInformation(
-                    Instant.now()
-                )
-            ), listOf()
-        )
+        if (replay == null) {
+            replay = Replay(
+                UUID.randomUUID(), listOf(entity), mutableMapOf(
+                    ReplayPlugin.replaySystem.defaultMetadataKeys!!.recordingInformation to ReplayRecordingInformation(
+                        Instant.now()
+                    )
+                ), listOf()
+            )
+        }
+
         ReplayPlugin.replaySystem.createReplaySession(
-            replay,
+            replay!!,
             listOf(BukkitReplayPlatform.convertIntoReplayViewer(player))
         )
     }
