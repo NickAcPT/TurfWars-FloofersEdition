@@ -1,7 +1,6 @@
 package io.github.nickacpt.event.utils
 
 import io.github.nickacpt.event.core.CorePlugin
-import io.github.nickacpt.event.core.display.events.TurfPlayerRefreshEvent
 import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerManager
 import org.bukkit.Bukkit
@@ -17,7 +16,7 @@ fun Player.refreshPlayer(
     canFly: Boolean? = null,
     playerGameMode: GameMode = GameMode.ADVENTURE
 ) {
-    TurfPlayerRefreshEvent(turfPlayer).callEvent()
+    turfPlayer.refresh()
 
     playerListName(turfPlayer.getDisplayName())
 

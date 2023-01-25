@@ -16,7 +16,7 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
     private var secondsLeft = totalSeconds
     private var tickCount = 0
 
-    val isFinished: Boolean
+    val hasFinished: Boolean
         get() = secondsLeft == 0
 
     fun restart() {

@@ -64,7 +64,7 @@ object TurfWarsLogic {
 
         // If we are in the starting state, and the countdown has finished,
         // we should switch to the in-game state
-        if (previousState == MinigameState.STARTING && !timers.lobbyCountdown.isRunning) {
+        if (previousState == MinigameState.STARTING && timers.lobbyCountdown.hasFinished) {
             return MinigameState.IN_GAME
         }
 

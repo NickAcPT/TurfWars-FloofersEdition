@@ -3,6 +3,7 @@ package io.github.nickacpt.event.turfwars.minigame.teams
 import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerDataKey
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
+import io.github.nickacpt.event.turfwars.utils.PrefixTeamConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.ForwardingAudience
 import net.kyori.adventure.text.format.NamedTextColor
@@ -13,8 +14,6 @@ data class TurfWarsTeam(
     val color: NamedTextColor,
     val playable: Boolean = true,
 ) : ForwardingAudience {
-    val players = mutableListOf<TurfPlayer>()
-    val playerCount get() = players.size
 
     companion object {
         private val TEAM_TAG = TurfPlayerDataKey<TurfWarsTeam>()
@@ -25,6 +24,10 @@ data class TurfWarsTeam(
                 this[TEAM_TAG] = value
             }
     }
+    val players = mutableListOf<TurfPlayer>()
+    val playerCount get() = players.size
+
+    private val consoleAudience = PrefixTeamConsoleProxyAudience(this)
 
     fun addPlayer(player: TurfPlayer) {
         // Remove player from previous team
@@ -40,8 +43,8 @@ data class TurfWarsTeam(
         player.team = null
     }
 
-    override fun audiences(): MutableIterable<Audience> {
-        return players
+    override fun audiences(): Iterable<Audience> {
+        return listOf(*players.toTypedArray(), consoleAudience).toList()
     }
 
 }

@@ -7,6 +7,7 @@ import io.github.nickacpt.event.turfwars.minigame.logic.TurfWarsLogic
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 import io.github.nickacpt.event.turfwars.minigame.timer.GameTimers
+import io.github.nickacpt.event.turfwars.utils.PrefixGameConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.ForwardingAudience
 import net.kyori.adventure.text.format.NamedTextColor
@@ -15,6 +16,7 @@ import java.util.*
 data class TurfWarsGame internal constructor(
     val id: UUID,
 ) : ForwardingAudience {
+
     companion object {
         private val GAME_TAG = TurfPlayerDataKey<TurfWarsGame>()
 
@@ -25,13 +27,14 @@ data class TurfWarsGame internal constructor(
             }
     }
 
-    private val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false)
+    private val consoleAudience = PrefixGameConsoleProxyAudience(this)
 
     val players = mutableListOf<TurfPlayer>()
-    val playerCount get() = players.count { it.team != spectatorTeam }
 
+    val playerCount get() = players.count { it.team != spectatorTeam }
     val timers = GameTimers(this)
 
+    private val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false)
     val teams = mutableListOf(
         spectatorTeam,
         TurfWarsTeam(this, "Red", NamedTextColor.RED),
@@ -83,7 +86,7 @@ data class TurfWarsGame internal constructor(
         locale.debug(this, message)
     }
 
-    override fun audiences(): MutableIterable<Audience> {
-        return players
+    override fun audiences(): Iterable<Audience> {
+        return listOf(*players.toTypedArray(), consoleAudience)
     }
 }
