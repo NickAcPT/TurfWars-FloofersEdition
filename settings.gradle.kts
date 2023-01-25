@@ -7,6 +7,6 @@ pluginManagement {
 
 rootProject.name = "turf-wars-event"
 
-include("replay-plugin", "core-plugin", "lobby-plugin")
+include("replay-plugin", "core-plugin", "minigame-plugin", "lobby-plugin")
 
 includeBuild("../OrionCraftMc/behaviours")

@@ -18,6 +18,10 @@ fun <T> simplePlaceholderResolver(resolver: (T) -> Component): SimplePlaceholder
     return SimplePlaceholderResolver(resolver = resolver)
 }
 
+inline fun <reified T> JavaPlugin.moonshine(name: String): T {
+    return moonshine(ConfigurationFileProvider(I18nConfiguration::class.java).getValueByName(this, name))
+}
+
 inline fun <reified T> JavaPlugin.moonshine(configuration: I18nConfiguration): T {
     return Moonshine.builder<T, Audience>(TypeToken.get(T::class.java))
         // A receiver locator is used to find the receiver of a message.

@@ -59,7 +59,10 @@ allprojects {
     }
 
     this.tasks.withType(Jar::class.java) {
-        val folder = if (this@allprojects.name.contains("replay")) "Replay" else "Lobby"
+        val folder = when {
+            this@allprojects.name.contains("replay") -> "Replay"
+            else -> "Minigame"
+        }
         destinationDirectory.set(File("""C:\Users\NickAc\Desktop\Turf Wars\$folder\plugins"""))
     }
 

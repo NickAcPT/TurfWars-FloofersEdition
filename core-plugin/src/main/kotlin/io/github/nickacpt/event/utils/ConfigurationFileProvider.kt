@@ -17,14 +17,18 @@ class ConfigurationFileProvider<T>(private val clazz: Class<T>) {
     private var cachedValue: T? = null
 
     operator fun getValue(plugin: JavaPlugin, property: KProperty<*>): T {
+        return getValueByName(plugin, property.name)
+    }
+
+    fun getValueByName(plugin: JavaPlugin, name: String): T {
         if (cachedValue != null) return cachedValue!!
 
         plugin.dataFolder.mkdirs()
-        val file = plugin.dataFolder.resolve("${property.name}.toml")
+        val file = plugin.dataFolder.resolve("$name.toml")
 
-        if (!file.exists()) {
+        if (true) {
             // Write default config from resources
-            plugin.saveResource("${property.name}.toml", false)
+            plugin.saveResource("$name.toml", true)
         }
 
         return mapper.readValue(file, clazz).also { cachedValue = it }

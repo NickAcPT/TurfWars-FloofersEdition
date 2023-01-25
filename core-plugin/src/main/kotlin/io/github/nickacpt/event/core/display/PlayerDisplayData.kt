@@ -1,5 +1,6 @@
 package io.github.nickacpt.event.core.display
 
+import io.github.nickacpt.event.core.display.scoreboard.SidebarManager
 import io.github.nickacpt.event.core.players.TurfPlayer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
