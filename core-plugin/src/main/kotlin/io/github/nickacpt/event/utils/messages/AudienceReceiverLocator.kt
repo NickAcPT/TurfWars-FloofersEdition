@@ -1,5 +1,6 @@
 package io.github.nickacpt.event.utils.messages
 
+import io.github.nickacpt.event.utils.messages.annotations.ActionBar
 import io.github.nickacpt.event.utils.messages.annotations.Receiver
 import net.kyori.adventure.audience.Audience
 import net.kyori.moonshine.receiver.IReceiverLocator
@@ -8,7 +9,16 @@ import java.lang.reflect.Method
 class AudienceReceiverLocator : IReceiverLocator<Audience> {
 
     override fun locate(method: Method, proxy: Any?, parameters: Array<out Any?>): Audience {
-        return findAnnotatedParameter<Audience, Receiver>(method, parameters) ?: Audience.empty()
+        // Find audience parameter
+        var audience = findAnnotatedParameter<Audience, Receiver>(method, parameters)
+
+        // If we were requested to send an action bar, wrap the audience in a special type
+        if (audience != null && method.isAnnotationPresent(ActionBar::class.java)) {
+            audience = ActionBarSenderAudience(audience)
+        }
+
+        // Return the audience, or an empty one if it was null
+        return audience ?: Audience.empty()
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -6,6 +6,10 @@ import net.kyori.moonshine.message.IMessageSender
 
 object AudienceMessagerSender : IMessageSender<Audience, Component> {
     override fun send(receiver: Audience?, renderedMessage: Component) {
-        receiver?.sendMessage(renderedMessage)
+        if (receiver is ActionBarSenderAudience) {
+            receiver.audience.sendActionBar(renderedMessage)
+        } else {
+            receiver?.sendMessage(renderedMessage)
+        }
     }
 }
