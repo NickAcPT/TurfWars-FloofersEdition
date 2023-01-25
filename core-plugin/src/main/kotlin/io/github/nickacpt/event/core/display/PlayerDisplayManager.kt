@@ -14,6 +14,10 @@ object PlayerDisplayManager : Listener {
         PlayerTagProvider,
     )
 
+    fun registerProvider(provider: PlayerDisplayProvider) {
+        providers.add(provider)
+    }
+
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         e.player.turfPlayer.initializeBukkitScoreboard()

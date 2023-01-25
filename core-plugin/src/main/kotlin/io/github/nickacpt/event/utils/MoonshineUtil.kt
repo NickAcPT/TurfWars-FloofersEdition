@@ -1,6 +1,7 @@
 package io.github.nickacpt.event.utils
 
 import io.github.nickacpt.event.config.i18n.I18nConfiguration
+import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.utils.messages.AudienceMessagerSender
 import io.github.nickacpt.event.utils.messages.AudienceReceiverLocator
 import io.github.nickacpt.event.utils.messages.SimpleMessageRenderer
@@ -41,8 +42,10 @@ inline fun <reified T> JavaPlugin.moonshine(configuration: I18nConfiguration): T
 
         // This is used to resolve placeholders in the message. These take the parameters of the method and resolve them into a component.
         .weightedPlaceholderResolver(Player::class.java, simplePlaceholderResolver { it.turfPlayer.getDisplayName() }, 0)
+        .weightedPlaceholderResolver(Int::class.java, simplePlaceholderResolver { Component.text(it) }, 0)
         .weightedPlaceholderResolver(String::class.java, simplePlaceholderResolver { Component.text(it) }, 0)
         .weightedPlaceholderResolver(Component::class.java, simplePlaceholderResolver { it }, 0)
+        .weightedPlaceholderResolver(TurfPlayer::class.java, simplePlaceholderResolver { it.getDisplayName() }, 0)
 
         // We finally create the proxy instance.
         .create(this.javaClass.classLoader)

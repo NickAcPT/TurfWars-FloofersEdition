@@ -1,12 +1,9 @@
-[static-placeholders]
-prefix = "<gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA><bold>TurfWars</bold> > </gradient>"
-
 [messages]
-player-joined="<prefix><yellow><player> joined the lobby."
-player-left="<prefix><yellow><player> left the lobby."
+player-joined="<turfwars><yellow><player> joined the lobby."
+player-left="<turfwars><yellow><player> left the lobby."
 
 fell-in-lava="<red>Ouch! Careful not to fall in the lava!"
 
-parkour-started="<prefix><green>Parkour started."
-parkour-cancelled="<prefix><red>Parkour cancelled."
-parkour-finished="<prefix><green>Parkour finished!"
+parkour-started="<turfwars><green>Parkour started."
+parkour-cancelled="<turfwars><red>Parkour cancelled."
+parkour-finished="<turfwars><green>Parkour finished!"

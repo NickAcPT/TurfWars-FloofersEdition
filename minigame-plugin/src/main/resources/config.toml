@@ -1,0 +1,4 @@
+[game]
+minimum-players = 1
+maximum-players = 2
+lobby-countdown = 15

@@ -1,0 +1,10 @@
+[minigame]
+join = "<dark_gray>[<color:#20ff08>+</color>] <gray><player> is ready to fight!"
+quit = "<dark_gray>[<color:#ff2008>-</color>] <gray><player> has places to be.."
+
+start-countdown = "<dark_gray>[<color:#00b0f0>i</color>] <gray>The game starts in <yellow><time></yellow>."
+not-enough-players = "<dark_gray>[<color:#ff2008>i</color>] <gray>Not enough players to start the game."
+
+scoreboard-title = "<turfwars>"
+
+debug = "<dark_gray>[<red>!</red>] <gray><message>"
