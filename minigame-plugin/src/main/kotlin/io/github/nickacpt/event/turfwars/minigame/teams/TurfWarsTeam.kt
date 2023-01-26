@@ -63,7 +63,7 @@ data class TurfWarsTeam(
         debug("Player ${player.name} is no longer part of the team.")
     }
 
-    fun debug(message: String) {
+    inline fun debug(message: String) {
         locale.debug(this, message)
     }
 

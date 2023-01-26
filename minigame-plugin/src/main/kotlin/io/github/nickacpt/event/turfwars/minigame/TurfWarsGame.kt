@@ -84,7 +84,7 @@ data class TurfWarsGame internal constructor(
         }
     }
 
-    fun debug(message: String) {
+    inline fun debug(message: String) {
         locale.debug(this, message)
     }
 
