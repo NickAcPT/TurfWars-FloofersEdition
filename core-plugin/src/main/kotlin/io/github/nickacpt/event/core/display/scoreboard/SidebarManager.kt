@@ -1,5 +1,6 @@
 package io.github.nickacpt.event.core.display.scoreboard
 
+import io.github.nickacpt.event.core.CorePlugin
 import io.github.nickacpt.event.core.players.TurfPlayer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -35,15 +36,18 @@ object SidebarManager {
 
         sidebarObjective.displayName(sidebarDisplay.title)
 
-        val newFinalLines = arrayOf(
-            MiniMessage.miniMessage().deserialize(
-                "<gray>    <date:'MM/dd/yyyy'>  ",
-                Formatter.date("date", LocalDateTime.now(ZoneId.of("America/New_York"))),
-            ),
-            Component.empty(),
-            *(sidebarDisplay.lines?.toTypedArray() ?: emptyArray()),
-            Component.empty()
-        )
+
+        val configLines = CorePlugin.instance.config.scoreboard.lines
+        val newFinalLines = configLines.flatMap {
+            if (it == "%lines%") {
+                sidebarDisplay.lines ?: emptyList()
+            } else {
+                listOf(MiniMessage.miniMessage().deserialize(
+                    it,
+                    Formatter.date("date", LocalDateTime.now(ZoneId.of("America/New_York"))),
+                ))
+            }
+        }
 
         if (newFinalLines.size > sidebarDisplay.trackedLines.size) {
             // We need to add more lines

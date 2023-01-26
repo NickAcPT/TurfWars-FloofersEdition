@@ -10,6 +10,7 @@ import io.leangen.geantyref.TypeToken
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.moonshine.Moonshine
+import net.kyori.moonshine.MoonshineBuilder
 import net.kyori.moonshine.strategy.StandardPlaceholderResolverStrategy
 import net.kyori.moonshine.strategy.supertype.StandardSupertypeThenInterfaceSupertypeStrategy
 import org.bukkit.entity.Player
@@ -41,13 +42,17 @@ inline fun <reified T> JavaPlugin.moonshine(configuration: I18nConfiguration): T
         .resolvingWithStrategy(StandardPlaceholderResolverStrategy(StandardSupertypeThenInterfaceSupertypeStrategy(false)))
 
         // This is used to resolve placeholders in the message. These take the parameters of the method and resolve them into a component.
-        .weightedPlaceholderResolver(Player::class.java, simplePlaceholderResolver { it.turfPlayer.getDisplayName() }, 0)
-        .weightedPlaceholderResolver(Int::class.java, simplePlaceholderResolver { Component.text(it) }, 0)
-        .weightedPlaceholderResolver(String::class.java, simplePlaceholderResolver { Component.text(it) }, 0)
-        .weightedPlaceholderResolver(Component::class.java, simplePlaceholderResolver { it }, 0)
-        .weightedPlaceholderResolver(TurfPlayer::class.java, simplePlaceholderResolver { it.getDisplayName() }, 0)
+        .placeholderResolver(Component::class.java) { it }
+        .placeholderResolver(Player::class.java) { it.turfPlayer.getDisplayName() }
+        .placeholderResolver(TurfPlayer::class.java) { it.getDisplayName() }
+        .placeholderResolver(String::class.java) { Component.text(it) }
+        .placeholderResolver(Int::class.java) { Component.text(it) }
+        .placeholderResolver(java.lang.Integer::class.java) { Component.text(it.toInt()) }
 
         // We finally create the proxy instance.
         .create(this.javaClass.classLoader)
 }
 
+fun <T, I, O, Z> MoonshineBuilder.Resolved<T, Audience, I, O, Component>.placeholderResolver(resolvedType: Class<out Z>, resolver: (Z) -> Component): MoonshineBuilder.Resolved<T, Audience, I, O, Component> {
+    return this.weightedPlaceholderResolver(resolvedType, simplePlaceholderResolver(resolver), 0)
+}
