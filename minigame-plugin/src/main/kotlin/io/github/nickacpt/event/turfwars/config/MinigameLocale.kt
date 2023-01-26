@@ -49,4 +49,10 @@ interface MinigameLocale {
         @Placeholder("message") message: String
     )
 
+    @Message("minigame.team-switch-notification")
+    fun teamSwitchNotification(
+        @Receiver player: TurfPlayer,
+        @Placeholder("team") team: Component
+    )
+
 }

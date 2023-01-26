@@ -2,10 +2,12 @@ package io.github.nickacpt.event.turfwars.minigame.teams
 
 import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerDataKey
+import io.github.nickacpt.event.turfwars.TurfWarsPlugin
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.turfwars.utils.PrefixTeamConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.ForwardingAudience
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import java.util.*
 
@@ -17,6 +19,9 @@ data class TurfWarsTeam(
 ) : ForwardingAudience {
 
     companion object {
+        // Since TurfWars is known to have only two teams, we can evenly split the max count in 2
+        val maximumPlayerCount get() = TurfWarsPlugin.config.game.maximumPlayers / 2
+
         private val TEAM_TAG = TurfPlayerDataKey<TurfWarsTeam>()
 
         var TurfPlayer.team
@@ -26,10 +31,18 @@ data class TurfWarsTeam(
                 this.refresh()
             }
     }
+
     val players = mutableMapOf<UUID, TurfPlayer>()
     val playerCount get() = players.size
 
     private val consoleAudience = PrefixTeamConsoleProxyAudience(this)
+
+    fun name(): Component = Component.text {
+        it.append(Component.text(name))
+        it.appendSpace()
+        it.append(Component.text("Team"))
+        it.color(color)
+    }
 
     fun addPlayer(player: TurfPlayer) {
         // Remove player from previous team

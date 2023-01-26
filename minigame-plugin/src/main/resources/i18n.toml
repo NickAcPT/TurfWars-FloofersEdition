@@ -7,6 +7,8 @@ not-enough-players = "<dark_gray>[<color:#ff2008>i</color>] <gray>Not enough pla
 
 scoreboard-title = "<turfwars>"
 
-scoreboard-players = "<color:#00b0f0><current><dark_gray> / </dark_gray><max>"
+scoreboard-players = "<white><current><gray>/</gray><max>"
+
+team-switch-notification = "<prefix><green>You are now on the <team>."
 
 debug = "<dark_gray>[<red>!</red>] <gray><message>"

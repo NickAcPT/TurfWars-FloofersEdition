@@ -5,28 +5,26 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.config
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
-import io.github.nickacpt.event.turfwars.minigame.logic.LobbyCountdownTimer.Companion.formatTime
+import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
 import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.minimessage.MiniMessage
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 
 object TurfWarsLogic {
 
     private fun TurfWarsGame.moveToNextState(previousState: MinigameState): MinigameState? {
         // If we are in the initialization state, we should switch to the waiting state,
-        // so we can wait for players to join
+        // so we can wait for players to join.
         if (previousState == MinigameState.INITIALIZING) {
             return MinigameState.WAITING
         }
 
-        // Whether we have enough players to start a game
+        // Whether we have enough players to start a game.
         val hasMinimumPlayersToStart = playerCount >= config.game.minimumPlayers
 
         // If we are in a state where players can still join into teams,
-        // and we have less than the minimum players, we should switch to the waiting state
+        // and we have less than the minimum players, we should switch to the waiting state.
         if (previousState.isWaitingForPlayers() && !hasMinimumPlayersToStart) {
             // If we are in the starting state, we should cancel the countdown and notify the players.
             if (timers.lobbyCountdown.isRunning) {
@@ -39,16 +37,39 @@ object TurfWarsLogic {
         }
 
         // If we are in the waiting state, and we have more than the minimum players,
-        // we should switch to the starting state and start the countdown
+        // we should switch to the starting state and start the countdown.
         if (previousState == MinigameState.WAITING && hasMinimumPlayersToStart) {
             timers.lobbyCountdown.restart()
             return MinigameState.STARTING
         }
 
         // If we are in the starting state, and the countdown has finished,
-        // we should switch to the in-game state
+        // we should switch to the first in-game state: Team Selection.
         if (previousState == MinigameState.STARTING && timers.lobbyCountdown.hasFinished) {
-            return MinigameState.IN_GAME
+            return MinigameState.TEAM_SELECTION
+        }
+
+        // Woah finally! It's about time we picked the teams!
+        if (previousState == MinigameState.TEAM_SELECTION) {
+            // First thing we have to do is gather all the players in the current game
+            // Then, we have to shuffle them and try our best to split them into two teams
+            val shuffledPlayers = ArrayDeque(players.shuffled())
+
+            // Now we have a shuffled list of players, so we need to find the playable teams
+            // to sequentially add the players into them.
+            val playableTeams = teams.filter { it.playable }
+
+            // We have our teams, so now we can add the players,
+            // making sure we remove them off the list of remaining players
+            playableTeams.forEach { team ->
+                while (shuffledPlayers.isNotEmpty() && team.playerCount < TurfWarsTeam.maximumPlayerCount) {
+                    val player = shuffledPlayers.removeFirst()
+
+                    team.addPlayer(player)
+                    locale.teamSwitchNotification(player, team.name())
+                }
+            }
+
         }
 
         return null
@@ -77,14 +98,11 @@ object TurfWarsLogic {
 
             list += listOf(
                 Component.text("State", null, TextDecoration.BOLD),
-                MiniMessage.miniMessage().deserialize(
-                    state.description,
-                    Placeholder.component("time", formatTime(timers.lobbyCountdown.remainingTime))
-                )
+                state.descriptionAsComponent(this)
             )
         }
 
-        return list.takeIf { it.isNotEmpty() }?.joinTo(mutableListOf(), listOf(space()))?.flatten()
+        return list.joinTo(mutableListOf(), listOf(space())).flatten()
     }
 
 }
