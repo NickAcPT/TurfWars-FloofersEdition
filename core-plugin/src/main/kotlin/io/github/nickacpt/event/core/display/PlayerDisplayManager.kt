@@ -1,12 +1,10 @@
 package io.github.nickacpt.event.core.display
 
-import io.github.nickacpt.event.core.CorePlugin
 import io.github.nickacpt.event.core.display.events.TurfPlayerRefreshEvent
 import io.github.nickacpt.event.core.display.providers.PlayerTagProvider
 import io.github.nickacpt.event.core.display.scoreboard.PlayerScoreboardDisplayData
 import io.github.nickacpt.event.core.display.scoreboard.SidebarManager
 import io.github.nickacpt.event.core.players.TurfPlayer
-import io.github.nickacpt.event.core.players.TurfPlayerManager
 import io.github.nickacpt.event.utils.turfPlayer
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -59,13 +57,5 @@ object PlayerDisplayManager : Listener {
         }
 
         SidebarManager.notifySidebarDisplay(player, player.trackingSidebarData)
-    }
-
-    fun registerScoreboardUpdateTask() {
-        Bukkit.getScheduler().runTaskTimer(CorePlugin.instance, Runnable {
-            TurfPlayerManager.players.forEach { player ->
-                updatePlayerScoreboard(player)
-            }
-        }, 0, 20L)
     }
 }

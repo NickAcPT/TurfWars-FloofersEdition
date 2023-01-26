@@ -54,8 +54,6 @@ class CorePlugin : JavaPlugin() {
         Bukkit.getPluginManager().registerEvents(WorldEvents, this)
         Bukkit.getPluginManager().registerEvents(TurfPlayerManager, this)
         Bukkit.getPluginManager().registerEvents(PlayerDisplayManager, this)
-
-        PlayerDisplayManager.registerScoreboardUpdateTask()
     }
 
     private var filterCommandTask: BukkitTask? = null
