@@ -56,7 +56,10 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
             }
 
             else -> {
-                onTick(remainingTime--)
+                onTick(remainingTime)
+
+                // Only change the remaining time after the tick
+                remainingTime--
             }
         }
     }
