@@ -10,6 +10,7 @@ import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
 import net.kyori.adventure.text.format.TextDecoration
+import kotlin.math.max
 
 object TurfWarsLogic {
 
@@ -57,19 +58,29 @@ object TurfWarsLogic {
 
             // Now we have a shuffled list of players, so we need to find the playable teams
             // to sequentially add the players into them.
-            val playableTeams = teams.filter { it.playable }
+            val gameTeams = teams.filter { it.playable }.toMutableList()
 
-            // We have our teams, so now we can add the players,
-            // making sure we remove them off the list of remaining players
-            playableTeams.forEach { team ->
-                while (shuffledPlayers.isNotEmpty() && team.playerCount < TurfWarsTeam.maximumPlayerCount) {
+            // We include the spectator team as a fallback for if there weren't any teams to fit the players into,
+            // making sure it's the last team
+            gameTeams += spectatorTeam
+
+            // We have our teams, so now we can add the players, making sure we remove them off
+            // the list of remaining players
+            gameTeams.forEach { team ->
+                while (shuffledPlayers.isNotEmpty() && (team.playerCount < TurfWarsTeam.maximumPlayerCount || !team.playable)) {
                     val player = shuffledPlayers.removeFirst()
-
                     team.addPlayer(player)
-                    locale.teamSwitchNotification(player, team.name())
+
+                    val teamName = team.name()
+                    if (team.playable) {
+                        locale.teamSwitchNotification(player, teamName)
+                    } else {
+                        locale.unableToPlaceInTeam(player, teamName)
+                    }
                 }
             }
 
+            return MinigameState.IN_GAME
         }
 
         return null
@@ -86,14 +97,14 @@ object TurfWarsLogic {
 
     val gameScoreboardTitle by lazy { locale.scoreboardTitle() }
 
-    fun TurfWarsGame.getScoreboardLines(player: TurfPlayer): List<Component>? {
+    fun TurfWarsGame.getScoreboardLines(player: TurfPlayer): List<Component> {
         // If the game is waiting for players, we should show the state and the amount of players
         val list = mutableListOf<List<Component>>()
 
         if (state.showsStateInScoreboard()) {
             list += listOf(
                 Component.text("Players", null, TextDecoration.BOLD),
-                locale.scoreboardPlayerCount(playerCount, config.game.maximumPlayers)
+                locale.scoreboardPlayerCount(playerCount, max(config.game.maximumPlayers, playerCount))
             )
 
             list += listOf(

@@ -36,7 +36,7 @@ data class TurfWarsGame internal constructor(
     val playerCount get() = playersMap.values.count { it.team != spectatorTeam }
     val timers = GameTimers(this)
 
-    private val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false)
+    val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false)
     val teams = mutableListOf(
         spectatorTeam,
         TurfWarsTeam(this, "Red", NamedTextColor.RED),

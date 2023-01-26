@@ -56,4 +56,10 @@ interface MinigameLocale {
         @Placeholder("team") team: Component
     )
 
+    @Message("minigame.unable-to-place-in-team")
+    fun unableToPlaceInTeam(
+        @Receiver player: TurfPlayer,
+        @Placeholder("team") team: Component
+    )
+
 }

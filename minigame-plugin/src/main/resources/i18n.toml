@@ -11,4 +11,6 @@ scoreboard-players = "<white><current><gray>/</gray><max>"
 
 team-switch-notification = "<prefix><green>You are now on the <team>."
 
+unable-to-place-in-team = "<prefix><red>We were unable to place you in any playable team, thus you are now in the <team>."
+
 debug = "<dark_gray>[<red>!</red>] <gray><message>"
