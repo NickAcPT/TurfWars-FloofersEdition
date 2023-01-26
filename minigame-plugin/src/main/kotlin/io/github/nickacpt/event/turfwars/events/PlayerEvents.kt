@@ -1,10 +1,10 @@
 package io.github.nickacpt.event.turfwars.events
 
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin
+import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.config
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame.Companion.game
 import io.github.nickacpt.event.utils.turfPlayer
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -34,7 +34,7 @@ object PlayerEvents : Listener {
 
     @EventHandler
     fun onPlayerSpawn(e: PlayerSpawnLocationEvent) {
-        e.spawnLocation = Location(e.player.world, 0.0, 73.0, 0.0)
+        e.spawnLocation = config.lobby.toBukkitLocation(e.player.world)
     }
 
 }
