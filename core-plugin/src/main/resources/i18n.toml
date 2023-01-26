@@ -4,3 +4,10 @@ prefix = "<gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA><bold>TurfWa
 
 [messages]
 chat-message = "<player><reset>: <message>"
+help-message = """\
+<green>-------------- <turfwars> --------------
+
+                <gold>Looking for help?
+         Message <aqua><click:suggest_command:'NickAc#0233'><hover:show_text:'<green>Click to put in chat!'>NickAc#0233</hover></click></aqua> on Discord.
+
+<green>-------------- <turfwars> --------------"""

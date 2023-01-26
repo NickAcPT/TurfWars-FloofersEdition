@@ -18,13 +18,14 @@ import java.util.*
 class TurfPlayer(val uuid: UUID, val data: TurfPlayerData) : ForwardingAudience.Single {
     private val tempData = mutableMapOf<TurfPlayerDataKey<*>, Any>()
 
+    internal val trackingSidebarData = TrackingPlayerScoreboardDisplayData(null, null)
+
+    var currentTag: PlayerTag = TagsManager.findByName(data.currentTagName) ?: TagsManager.tags.first()
+
     val name get() = bukkitPlayer?.name ?: "Unknown"
 
-    fun initializeBukkitScoreboard() {
-        if (bukkitScoreboard == null) {
-            bukkitScoreboard = Bukkit.getScoreboardManager().newScoreboard
-        }
-    }
+    val bukkitPlayer: Player?
+        get() = Bukkit.getPlayer(uuid)
 
     internal var bukkitScoreboard: Scoreboard? = null
         private set(value) {
@@ -32,12 +33,11 @@ class TurfPlayer(val uuid: UUID, val data: TurfPlayerData) : ForwardingAudience.
             bukkitPlayer?.scoreboard = value ?: Bukkit.getScoreboardManager().mainScoreboard
         }
 
-    internal val trackingSidebarData = TrackingPlayerScoreboardDisplayData(null, null)
-
-    var currentTag: PlayerTag = TagsManager.findByName(data.currentTagName) ?: TagsManager.tags.first()
-
-    val bukkitPlayer: Player?
-        get() = Bukkit.getPlayer(uuid)
+    fun initializeBukkitScoreboard() {
+        if (bukkitScoreboard == null) {
+            bukkitScoreboard = Bukkit.getScoreboardManager().newScoreboard
+        }
+    }
 
     fun getDisplayName(): Component {
         val team = bukkitScoreboard?.getTeam(name)
