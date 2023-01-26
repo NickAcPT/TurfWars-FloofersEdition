@@ -1,11 +1,13 @@
 package io.github.nickacpt.event.turfwars
 
 import io.github.nickacpt.event.core.display.PlayerDisplayManager
+import io.github.nickacpt.event.turfwars.commands.raw.RawInformationCommands
+import io.github.nickacpt.event.turfwars.config.MinigameLocale
 import io.github.nickacpt.event.turfwars.config.TurfWarsConfig
 import io.github.nickacpt.event.turfwars.display.TurfWarsDisplayProvider
 import io.github.nickacpt.event.turfwars.events.PlayerEvents
-import io.github.nickacpt.event.turfwars.config.MinigameLocale
 import io.github.nickacpt.event.turfwars.minigame.GameManager
+import io.github.nickacpt.event.utils.TurfCommandManager
 import io.github.nickacpt.event.utils.getConfigurationFileProvider
 import io.github.nickacpt.event.utils.moonshine
 import org.bukkit.Bukkit
@@ -31,6 +33,9 @@ class TurfWarsPlugin : JavaPlugin() {
     val locale = moonshine<MinigameLocale>("i18n")
 
     override fun onEnable() {
+        val commandManager = TurfCommandManager(this)
+        commandManager.annotationParser.parse(RawInformationCommands)
+
         Bukkit.getPluginManager().registerEvents(PlayerEvents, this)
         PlayerDisplayManager.registerProvider(TurfWarsDisplayProvider)
 
