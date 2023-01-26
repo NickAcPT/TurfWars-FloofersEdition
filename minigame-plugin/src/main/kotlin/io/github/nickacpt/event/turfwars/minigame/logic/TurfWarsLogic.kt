@@ -6,7 +6,9 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.turfwars.minigame.logic.LobbyCountdownTimer.Companion.formatTime
+import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.Component.space
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 
@@ -64,16 +66,23 @@ object TurfWarsLogic {
 
     fun TurfWarsGame.getScoreboardLines(player: TurfPlayer): List<Component>? {
         // If the game is waiting for players, we should show the state and the amount of players
-        val list = mutableListOf<Component>()
+        val list = mutableListOf<List<Component>>()
 
         if (state.showsStateInScoreboard()) {
-            list += MiniMessage.miniMessage().deserialize(
-                state.description,
-                Placeholder.component("time", formatTime(timers.lobbyCountdown.remainingTime))
+            list += listOf(
+                Component.text("Players"),
+                locale.scoreboardPlayerCount(playerCount, config.game.maximumPlayers)
+            )
+
+            list += listOf(
+                MiniMessage.miniMessage().deserialize(
+                    state.description,
+                    Placeholder.component("time", formatTime(timers.lobbyCountdown.remainingTime))
+                )
             )
         }
 
-        return list.takeIf { it.isNotEmpty() }
+        return list.takeIf { it.isNotEmpty() }?.joinTo(mutableListOf(), listOf(space()))?.flatten()
     }
 
 }

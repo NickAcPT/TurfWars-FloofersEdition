@@ -36,6 +36,12 @@ interface MinigameLocale {
     @Message("minigame.scoreboard-title")
     fun scoreboardTitle(): Component
 
+    @Message("minigame.scoreboard-players")
+    fun scoreboardPlayerCount(
+        @Placeholder("current") current: Int,
+        @Placeholder("max") max: Int
+    ): Component
+
     @ActionBar
     @Message("minigame.debug")
     fun debug(
