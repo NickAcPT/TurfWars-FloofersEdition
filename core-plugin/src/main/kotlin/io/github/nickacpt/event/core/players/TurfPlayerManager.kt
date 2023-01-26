@@ -7,6 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
+import java.util.concurrent.Semaphore
 
 object TurfPlayerManager : Listener {
 
@@ -19,7 +20,10 @@ object TurfPlayerManager : Listener {
     private fun initializePlayerInstance(uuid: UUID) = TurfPlayer(uuid, loadPlayerData(uuid))
 
     fun getOrLoadTurfPlayer(uuid: UUID): TurfPlayer {
-        return loadedPlayers.getOrPut(uuid) { initializePlayerInstance(uuid) }
+        getMutex(uuid).acquire()
+        return loadedPlayers.getOrPut(uuid) { initializePlayerInstance(uuid) }.also {
+            getMutex(uuid).release()
+        }
     }
 
     private fun unloadTurfPlayer(e: PlayerQuitEvent) {
@@ -27,6 +31,11 @@ object TurfPlayerManager : Listener {
         if (player != null) {
             savePlayerData(player.uuid, player.data)
         }
+    }
+
+    private val playerLoadMutexMap = mutableMapOf<UUID, Semaphore>()
+    private fun getMutex(uuid: UUID): Semaphore {
+        return playerLoadMutexMap.getOrPut(uuid) { Semaphore(1) }
     }
 
     fun loadPlayerData(uuid: UUID): TurfPlayerData {
