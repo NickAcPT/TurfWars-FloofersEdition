@@ -13,11 +13,15 @@ enum class MinigameState(private val description: String) {
     IN_GAME("<gold>Game in progress"),
     ENDING("<red>Ending");
 
+    companion object {
+        fun waitingForPlayersStates() = arrayOf(WAITING, STARTING)
+    }
+
     /**
      * Whether players can join the game in this state
      */
     fun isWaitingForPlayers(): Boolean {
-        return this == WAITING || this == STARTING
+        return this in waitingForPlayersStates()
     }
 
     fun isInGame(): Boolean {

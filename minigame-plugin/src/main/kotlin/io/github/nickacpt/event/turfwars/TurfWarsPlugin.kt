@@ -7,6 +7,7 @@ import io.github.nickacpt.event.turfwars.config.TurfWarsConfig
 import io.github.nickacpt.event.turfwars.display.TurfWarsDisplayProvider
 import io.github.nickacpt.event.turfwars.events.PlayerEvents
 import io.github.nickacpt.event.turfwars.minigame.GameManager
+import io.github.nickacpt.event.turfwars.minigame.events.LobbyEvents
 import io.github.nickacpt.event.utils.TurfCommandManager
 import io.github.nickacpt.event.utils.getConfigurationFileProvider
 import io.github.nickacpt.event.utils.moonshine
@@ -37,6 +38,7 @@ class TurfWarsPlugin : JavaPlugin() {
         commandManager.annotationParser.parse(RawInformationCommands)
 
         Bukkit.getPluginManager().registerEvents(PlayerEvents, this)
+        Bukkit.getPluginManager().registerEvents(LobbyEvents, this)
         PlayerDisplayManager.registerProvider(TurfWarsDisplayProvider)
 
         GameManager.startGameTicking()
