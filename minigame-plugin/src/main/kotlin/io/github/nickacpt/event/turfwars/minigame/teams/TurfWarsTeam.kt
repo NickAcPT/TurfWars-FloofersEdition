@@ -3,6 +3,7 @@ package io.github.nickacpt.event.turfwars.minigame.teams
 import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerDataKey
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin
+import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.turfwars.utils.PrefixTeamConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
@@ -51,11 +52,19 @@ data class TurfWarsTeam(
         // Add player to this team
         players[player.uuid] = player
         player.team = this
+
+        debug("Player ${player.name} is now part of the team.")
     }
 
     fun removePlayer(player: TurfPlayer) {
         players.remove(player.uuid)
         player.team = null
+
+        debug("Player ${player.name} is no longer part of the team.")
+    }
+
+    fun debug(message: String) {
+        locale.debug(this, message)
     }
 
     override fun audiences(): Iterable<Audience> {

@@ -4,6 +4,7 @@ import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.utils.messages.annotations.ActionBar
 import io.github.nickacpt.event.utils.messages.annotations.Receiver
+import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.moonshine.annotation.Message
 import net.kyori.moonshine.annotation.Placeholder
@@ -45,7 +46,7 @@ interface MinigameLocale {
     @ActionBar
     @Message("minigame.debug")
     fun debug(
-        @Receiver game: TurfWarsGame,
+        @Receiver audience: Audience,
         @Placeholder("message") message: String
     )
 
