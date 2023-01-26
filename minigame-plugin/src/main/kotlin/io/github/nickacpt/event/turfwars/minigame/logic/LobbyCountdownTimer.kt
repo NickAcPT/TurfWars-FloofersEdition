@@ -26,6 +26,7 @@ class LobbyCountdownTimer(game: TurfWarsGame) : CountdownTimer(game, TurfWarsPlu
 
     override fun onTick(secondsLeft: Int) {
         game.debug("Lobby countdown timer ticked, $secondsLeft seconds left")
+        game.players.forEach { it.refresh() }
 
         val shouldAlwaysShow = secondsLeft <= 5
         val shouldShow = shouldAlwaysShow || secondsLeft % 5 == 0
