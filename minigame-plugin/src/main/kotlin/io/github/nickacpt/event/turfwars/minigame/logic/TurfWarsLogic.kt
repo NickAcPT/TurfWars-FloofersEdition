@@ -5,32 +5,12 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.config
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
+import io.github.nickacpt.event.turfwars.minigame.logic.LobbyCountdownTimer.Companion.formatTime
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 
 object TurfWarsLogic {
-
-    val gameScoreboardTitle by lazy { locale.scoreboardTitle() }
-
-    fun TurfWarsGame.getScoreboardLines(player: TurfPlayer): List<Component>? {
-        // If the game is waiting for players, we should show the state and the amount of players
-        val list = mutableListOf<Component>()
-
-        if (state.isWaitingForPlayers()) {
-            list += MiniMessage.miniMessage().deserialize(state.description)
-        }
-
-        return list.takeIf { it.isNotEmpty() }
-    }
-
-    fun TurfWarsGame.tickGame() {
-        val currentState = state
-        val nextState = moveToNextState(currentState)
-        if (nextState != null && nextState != currentState) {
-            state = nextState
-            players.forEach { it.refresh() }
-        }
-    }
 
     private fun TurfWarsGame.moveToNextState(previousState: MinigameState): MinigameState? {
         // If we are in the initialization state, we should switch to the waiting state,
@@ -69,6 +49,31 @@ object TurfWarsLogic {
         }
 
         return null
+    }
+
+    fun TurfWarsGame.tickGame() {
+        val currentState = state
+        val nextState = moveToNextState(currentState)
+        if (nextState != null && nextState != currentState) {
+            state = nextState
+            players.forEach { it.refresh() }
+        }
+    }
+
+    val gameScoreboardTitle by lazy { locale.scoreboardTitle() }
+
+    fun TurfWarsGame.getScoreboardLines(player: TurfPlayer): List<Component>? {
+        // If the game is waiting for players, we should show the state and the amount of players
+        val list = mutableListOf<Component>()
+
+        if (state.showsStateInScoreboard()) {
+            list += MiniMessage.miniMessage().deserialize(
+                state.description,
+                Placeholder.component("time", formatTime(timers.lobbyCountdown.remainingTime))
+            )
+        }
+
+        return list.takeIf { it.isNotEmpty() }
     }
 
 }

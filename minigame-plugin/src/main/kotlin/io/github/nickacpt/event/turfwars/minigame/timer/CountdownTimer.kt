@@ -13,11 +13,12 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
 
     var isRunning = false
         private set
-    private var secondsLeft = totalSeconds
+    var remainingTime = totalSeconds
+        private set
     private var tickCount = 0
 
     val hasFinished: Boolean
-        get() = secondsLeft == 0
+        get() = remainingTime == 0
 
     fun restart() {
         reset()
@@ -26,7 +27,7 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
 
     fun reset() {
         isRunning = false
-        secondsLeft = totalSeconds
+        remainingTime = totalSeconds
     }
 
     fun start() {
@@ -49,13 +50,13 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
         if (tickCount-- > 0) return
         tickCount = TICKS_PER_SECOND
 
-        when (secondsLeft) {
+        when (remainingTime) {
             0 -> {
                 onFinish()
             }
 
             else -> {
-                onTick(secondsLeft--)
+                onTick(remainingTime--)
             }
         }
     }

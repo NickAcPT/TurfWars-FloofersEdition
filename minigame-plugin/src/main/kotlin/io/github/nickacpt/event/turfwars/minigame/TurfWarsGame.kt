@@ -24,14 +24,16 @@ data class TurfWarsGame internal constructor(
             get() = this[GAME_TAG]
             set(value) {
                 this[GAME_TAG] = value
+                this.refresh()
             }
     }
 
     private val consoleAudience = PrefixGameConsoleProxyAudience(this)
 
-    val players = mutableListOf<TurfPlayer>()
+    private val playersMap = mutableMapOf<UUID, TurfPlayer>()
+    val players: Collection<TurfPlayer> get() = playersMap.values
 
-    val playerCount get() = players.count { it.team != spectatorTeam }
+    val playerCount get() = playersMap.values.count { it.team != spectatorTeam }
     val timers = GameTimers(this)
 
     private val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false)
@@ -52,7 +54,7 @@ data class TurfWarsGame internal constructor(
         player.game?.removePlayer(player)
 
         // Add player to this game
-        players.add(player)
+        playersMap[player.uuid] = player
         player.game = this
 
         locale.joinedGame(this, player)
@@ -63,7 +65,7 @@ data class TurfWarsGame internal constructor(
         player.team?.removePlayer(player)
 
         // Then remove player from the game
-        players.remove(player)
+        playersMap.remove(player.uuid)
         player.game = null
 
         locale.quitGame(this, player)
@@ -87,6 +89,6 @@ data class TurfWarsGame internal constructor(
     }
 
     override fun audiences(): Iterable<Audience> {
-        return listOf(*players.toTypedArray(), consoleAudience)
+        return listOf(*playersMap.values.toTypedArray(), consoleAudience)
     }
 }

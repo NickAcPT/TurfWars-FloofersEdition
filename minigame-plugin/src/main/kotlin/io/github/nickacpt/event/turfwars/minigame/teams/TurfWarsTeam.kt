@@ -7,6 +7,7 @@ import io.github.nickacpt.event.turfwars.utils.PrefixTeamConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.ForwardingAudience
 import net.kyori.adventure.text.format.NamedTextColor
+import java.util.*
 
 data class TurfWarsTeam(
     val game: TurfWarsGame,
@@ -22,9 +23,10 @@ data class TurfWarsTeam(
             get() = this[TEAM_TAG]
             set(value) {
                 this[TEAM_TAG] = value
+                this.refresh()
             }
     }
-    val players = mutableListOf<TurfPlayer>()
+    val players = mutableMapOf<UUID, TurfPlayer>()
     val playerCount get() = players.size
 
     private val consoleAudience = PrefixTeamConsoleProxyAudience(this)
@@ -34,17 +36,17 @@ data class TurfWarsTeam(
         player.team?.removePlayer(player)
 
         // Add player to this team
-        players.add(player)
+        players[player.uuid] = player
         player.team = this
     }
 
     fun removePlayer(player: TurfPlayer) {
-        players.remove(player)
+        players.remove(player.uuid)
         player.team = null
     }
 
     override fun audiences(): Iterable<Audience> {
-        return listOf(*players.toTypedArray(), consoleAudience).toList()
+        return listOf(*players.values.toTypedArray(), consoleAudience).toList()
     }
 
 }
