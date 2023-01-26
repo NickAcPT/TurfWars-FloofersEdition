@@ -17,8 +17,14 @@ object SidebarManager {
     private val linesNames = NamedTextColor.NAMES.values()
         .map { LegacyComponentSerializer.legacySection().serialize(Component.space().color(it)).replace(" ", "") }
 
-    fun notifySidebarDisplay(target: TurfPlayer, sidebarDisplay: PlayerScoreboardDisplayData) {
+    fun notifySidebarDisplay(target: TurfPlayer, sidebarDisplay: TrackingPlayerScoreboardDisplayData) {
         val scoreboard = target.bukkitScoreboard ?: return
+
+        if (sidebarDisplay.title == null) {
+            sidebarDisplay.trackedLines.forEach { it.stopTracking() }
+            scoreboard.getObjective(DisplaySlot.SIDEBAR)?.unregister()
+            return
+        }
 
         val sidebarObjective =
             scoreboard.getObjective(DisplaySlot.SIDEBAR) ?: scoreboard.registerNewObjective(
@@ -35,7 +41,8 @@ object SidebarManager {
                 Formatter.date("date", LocalDateTime.now(ZoneId.of("America/New_York"))),
             ),
             Component.empty(),
-            *sidebarDisplay.lines.toTypedArray()
+            *(sidebarDisplay.lines?.toTypedArray() ?: emptyArray()),
+            Component.empty()
         )
 
         if (newFinalLines.size > sidebarDisplay.trackedLines.size) {
@@ -58,7 +65,7 @@ object SidebarManager {
     private fun startTrackingNewLine(
         lineNumber: Int,
         sidebarObjective: Objective,
-        sidebarDisplay: PlayerScoreboardDisplayData
+        sidebarDisplay: TrackingPlayerScoreboardDisplayData
     ) {
         val index = lineNumber - 1
         val entryName = linesNames[index]

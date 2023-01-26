@@ -1,6 +1,7 @@
 package io.github.nickacpt.event.core.players
 
 import io.github.nickacpt.event.core.display.events.TurfPlayerRefreshEvent
+import io.github.nickacpt.event.core.display.scoreboard.TrackingPlayerScoreboardDisplayData
 import io.github.nickacpt.event.core.tags.PlayerTag
 import io.github.nickacpt.event.core.tags.TagsManager
 import net.kyori.adventure.audience.Audience
@@ -25,11 +26,13 @@ class TurfPlayer(val uuid: UUID, val data: TurfPlayerData) : ForwardingAudience.
         }
     }
 
-    var bukkitScoreboard: Scoreboard? = null
+    internal var bukkitScoreboard: Scoreboard? = null
         private set(value) {
             field = value
             bukkitPlayer?.scoreboard = value ?: Bukkit.getScoreboardManager().mainScoreboard
         }
+
+    internal val trackingSidebarData = TrackingPlayerScoreboardDisplayData(null, null)
 
     var currentTag: PlayerTag = TagsManager.findByName(data.currentTagName) ?: TagsManager.tags.first()
 
