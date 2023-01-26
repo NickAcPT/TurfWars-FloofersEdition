@@ -1,6 +1,11 @@
 package io.github.nickacpt.event.turfwars.minigame
 
-enum class MinigameState(val description: String) {
+import io.github.nickacpt.event.turfwars.minigame.logic.LobbyCountdownTimer
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+
+enum class MinigameState(private val description: String) {
     INITIALIZING("<gray>Initializing.."),
     WAITING("<yellow>Waiting for players.."),
     STARTING("<green>Starting in <yellow><time></yellow>.."),
@@ -21,6 +26,13 @@ enum class MinigameState(val description: String) {
 
     fun showsStateInScoreboard(): Boolean {
         return isWaitingForPlayers() || this == ENDING
+    }
+
+    fun descriptionAsComponent(game: TurfWarsGame): Component {
+        return MiniMessage.miniMessage().deserialize(
+            description,
+            Placeholder.component("time", LobbyCountdownTimer.formatTime(game.timers.lobbyCountdown.remainingTime))
+        )
     }
 
 }
