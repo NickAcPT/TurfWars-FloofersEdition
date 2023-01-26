@@ -22,7 +22,7 @@ class TurfPlayer(val uuid: UUID, val data: TurfPlayerData) : ForwardingAudience.
 
     var currentTag: PlayerTag = TagsManager.findByName(data.currentTagName) ?: TagsManager.tags.first()
 
-    val name get() = bukkitPlayer?.name ?: "Unknown"
+    val name get() = bukkitPlayer?.name ?: "Unknown($uuid)"
 
     val bukkitPlayer: Player?
         get() = Bukkit.getPlayer(uuid)
