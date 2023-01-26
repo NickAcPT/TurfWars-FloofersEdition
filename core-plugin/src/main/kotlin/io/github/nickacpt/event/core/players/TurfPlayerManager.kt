@@ -13,6 +13,9 @@ object TurfPlayerManager : Listener {
     private val mapper = jacksonObjectMapper()
     private val loadedPlayers = mutableMapOf<UUID, TurfPlayer>()
 
+    val players: Collection<TurfPlayer>
+        get() = loadedPlayers.values
+
     private fun initializePlayerInstance(uuid: UUID) = TurfPlayer(uuid, loadPlayerData(uuid))
 
     fun getOrLoadTurfPlayer(uuid: UUID): TurfPlayer {
@@ -53,13 +56,13 @@ object TurfPlayerManager : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
     fun onJoin(e: PlayerJoinEvent) {
         // Calling get will initialize the player instance if it doesn't exist
         getOrLoadTurfPlayer(e.player.uniqueId)
     }
 
-    @EventHandler
+    @EventHandler(priority = org.bukkit.event.EventPriority.MONITOR)
     fun onQuit(e: PlayerQuitEvent) {
         unloadTurfPlayer(e)
     }
