@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.turfwars.i18n
+package io.github.nickacpt.event.turfwars.config
 
 import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame

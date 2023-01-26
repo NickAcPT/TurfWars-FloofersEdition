@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.turfwars.handlers
+package io.github.nickacpt.event.turfwars.events
 
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame.Companion.game

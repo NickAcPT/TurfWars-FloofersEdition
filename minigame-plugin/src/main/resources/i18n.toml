@@ -7,6 +7,6 @@ not-enough-players = "<dark_gray>[<color:#ff2008>i</color>] <gray>Not enough pla
 
 scoreboard-title = "<turfwars>"
 
-scoreboard-players = "<color:#00b0f0><current><dark_gray>/</dark_gray><max>"
+scoreboard-players = "<color:#00b0f0><current><dark_gray> / </dark_gray><max>"
 
 debug = "<dark_gray>[<red>!</red>] <gray><message>"

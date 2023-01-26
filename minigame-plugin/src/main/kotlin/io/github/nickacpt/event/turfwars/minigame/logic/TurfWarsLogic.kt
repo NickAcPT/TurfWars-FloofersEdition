@@ -9,6 +9,7 @@ import io.github.nickacpt.event.turfwars.minigame.logic.LobbyCountdownTimer.Comp
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
+import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 
@@ -70,11 +71,12 @@ object TurfWarsLogic {
 
         if (state.showsStateInScoreboard()) {
             list += listOf(
-                Component.text("Players"),
+                Component.text("Players", null, TextDecoration.BOLD),
                 locale.scoreboardPlayerCount(playerCount, config.game.maximumPlayers)
             )
 
             list += listOf(
+                Component.text("State", null, TextDecoration.BOLD),
                 MiniMessage.miniMessage().deserialize(
                     state.description,
                     Placeholder.component("time", formatTime(timers.lobbyCountdown.remainingTime))
