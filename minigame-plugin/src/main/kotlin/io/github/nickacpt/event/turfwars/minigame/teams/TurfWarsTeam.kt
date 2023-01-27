@@ -4,6 +4,8 @@ import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerDataKey
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
+import io.github.nickacpt.event.turfwars.config.ConfigurationLocation
+import io.github.nickacpt.event.turfwars.config.PlayerSpawnsConfig
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.turfwars.utils.PrefixTeamConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
@@ -17,6 +19,7 @@ data class TurfWarsTeam(
     val name: String,
     val color: NamedTextColor,
     val playable: Boolean = true,
+    val spawnProvider: (PlayerSpawnsConfig) -> ConfigurationLocation
 ) : ForwardingAudience {
 
     companion object {
@@ -33,8 +36,10 @@ data class TurfWarsTeam(
             }
     }
 
-    val players = mutableMapOf<UUID, TurfPlayer>()
-    val playerCount get() = players.size
+    private val playersMap = mutableMapOf<UUID, TurfPlayer>()
+    val players get() = playersMap.values
+
+    val playerCount get() = playersMap.size
 
     private val consoleAudience = PrefixTeamConsoleProxyAudience(this)
 
@@ -50,14 +55,14 @@ data class TurfWarsTeam(
         player.team?.removePlayer(player)
 
         // Add player to this team
-        players[player.uuid] = player
+        playersMap[player.uuid] = player
         player.team = this
 
         debug("Player ${player.name} is now part of the team.")
     }
 
     fun removePlayer(player: TurfPlayer) {
-        players.remove(player.uuid)
+        playersMap.remove(player.uuid)
         player.team = null
 
         debug("Player ${player.name} is no longer part of the team.")
@@ -68,7 +73,7 @@ data class TurfWarsTeam(
     }
 
     override fun audiences(): Iterable<Audience> {
-        return listOf(*players.values.toTypedArray(), consoleAudience).toList()
+        return listOf(*players.toTypedArray(), consoleAudience).toList()
     }
 
 }

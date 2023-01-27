@@ -36,11 +36,11 @@ data class TurfWarsGame internal constructor(
     val playerCount get() = playersMap.values.count { it.team != spectatorTeam }
     val timers = GameTimers(this)
 
-    val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false)
+    val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false) { it.spectator }
     val teams = mutableListOf(
         spectatorTeam,
-        TurfWarsTeam(this, "Red", NamedTextColor.RED),
-        TurfWarsTeam(this, "Blue", NamedTextColor.BLUE),
+        TurfWarsTeam(this, "Red", NamedTextColor.RED) { it.red.random() },
+        TurfWarsTeam(this, "Blue", NamedTextColor.BLUE) { it.blue.random() },
     )
 
     var state: MinigameState = MinigameState.INITIALIZING

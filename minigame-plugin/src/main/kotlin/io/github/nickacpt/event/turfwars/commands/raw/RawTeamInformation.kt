@@ -8,5 +8,5 @@ data class RawTeamInformation(
     val color: String,
     val players: Set<UUID>
 ) {
-    constructor(team: TurfWarsTeam) : this(team.name, team.color.toString(), team.players.keys)
+    constructor(team: TurfWarsTeam) : this(team.name, team.color.toString(), team.players.map { it.uuid }.toSet())
 }

@@ -6,6 +6,7 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
+import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
@@ -80,8 +81,23 @@ object TurfWarsLogic {
                 }
             }
 
+            return MinigameState.PLAYER_LOCATION_SELECTION
+        }
+
+        // Now that players have been placed into teams, we need to teleport them to their respective locations
+        // by looping through all the players in the game and finding a location to teleport them into.
+        if (previousState == MinigameState.PLAYER_LOCATION_SELECTION) {
+            players.forEach { player ->
+                val team = player.team ?: return@forEach
+                val bukkitPlayer = player.bukkitPlayer ?: return@forEach
+
+                val spawn = team.spawnProvider(config.game.playerSpawns)
+                bukkitPlayer.teleport(spawn.toBukkitLocation(bukkitPlayer.world))
+            }
+
             return MinigameState.IN_GAME
         }
+
 
         return null
     }

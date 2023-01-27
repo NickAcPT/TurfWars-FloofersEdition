@@ -10,11 +10,14 @@ enum class MinigameState(private val description: String) {
     WAITING("<yellow>Waiting for players.."),
     STARTING("<green>Starting in <yellow><time></yellow>.."),
     TEAM_SELECTION("<gray>Team selection"),
+    PLAYER_LOCATION_SELECTION("<gray>Player location selection"),
     IN_GAME("<gold>Game in progress"),
     ENDING("<red>Ending");
 
     companion object {
-        fun waitingForPlayersStates() = arrayOf(WAITING, STARTING)
+        fun waitingForPlayersStates() = arrayOf(WAITING, STARTING, TEAM_SELECTION)
+
+        fun inGameStates() = arrayOf(IN_GAME)
     }
 
     /**
@@ -25,7 +28,7 @@ enum class MinigameState(private val description: String) {
     }
 
     fun isInGame(): Boolean {
-        return this == TEAM_SELECTION || this == IN_GAME
+        return this in inGameStates()
     }
 
     fun showsStateInScoreboard(): Boolean {
