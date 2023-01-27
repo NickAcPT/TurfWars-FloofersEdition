@@ -17,7 +17,7 @@ object PlayerDisplayManager : Listener {
     )
 
     fun registerProvider(provider: PlayerDisplayProvider) {
-        providers.add(provider)
+        providers.add(0, provider)
     }
 
     @EventHandler
