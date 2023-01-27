@@ -17,6 +17,10 @@ open class PrefixedConsoleProxyAudience(prefix: String) : ForwardingAudience.Sin
         return prefix.append(message)
     }
 
+    override fun sendActionBar(message: Component) {
+        sendMessage(message)
+    }
+
     override fun sendMessage(message: Component) {
         super.sendMessage(prefixMessage(message))
     }
