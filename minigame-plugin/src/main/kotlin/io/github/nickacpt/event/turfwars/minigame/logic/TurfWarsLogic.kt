@@ -5,9 +5,11 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.config
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
+import io.github.nickacpt.event.turfwars.minigame.logic.states.game.BaseTurfStateLogic
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
+import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextDecoration
 import kotlin.math.max
 
@@ -51,6 +53,23 @@ object TurfWarsLogic {
                 Component.text("State", null, TextDecoration.BOLD),
                 state.descriptionAsComponent(this)
             )
+        }
+
+        if (state.isInGame()) {
+            val description = state.descriptionAsComponent(this)
+            val turfStateLogic = state.stateLogics.firstNotNullOfOrNull { it as? BaseTurfStateLogic }
+
+            if (turfStateLogic != null) {
+                list += listOf(
+                    Component.join(
+                        JoinConfiguration.separator(space()),
+                        description,
+                        Component.text("Time")
+                    ).mergeStyle(description).decorate(TextDecoration.BOLD),
+                    turfStateLogic.timer(this).remainingTime()
+                )
+            }
+
         }
 
         return list.joinTo(mutableListOf(), listOf(space())).flatten()

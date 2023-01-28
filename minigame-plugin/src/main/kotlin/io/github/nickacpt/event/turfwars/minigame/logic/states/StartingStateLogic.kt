@@ -7,7 +7,7 @@ object StartingStateLogic : TurfWarsGameStateLogic {
     override fun TurfWarsGame.tickState(): MinigameState? {
         // If we are in the starting state, and the countdown has finished,
         // we should switch to the first in-game state: Team Selection.
-        if (timers.lobbyCountdown.hasFinished) {
+        if (timers.lobbyCountdown.isFinished) {
             return MinigameState.TEAM_SELECTION
         }
 

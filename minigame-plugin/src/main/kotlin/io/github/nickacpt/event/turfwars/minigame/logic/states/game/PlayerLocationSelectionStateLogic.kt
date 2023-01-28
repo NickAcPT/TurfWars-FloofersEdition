@@ -7,7 +7,7 @@ import io.github.nickacpt.event.turfwars.minigame.logic.states.TurfWarsGameState
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 
 object PlayerLocationSelectionStateLogic : TurfWarsGameStateLogic {
-    override fun TurfWarsGame.tickState(): MinigameState? {
+    override fun TurfWarsGame.tickState(): MinigameState {
         // Now that players have been placed into teams, we need to teleport them to their respective locations
         // by looping through all the players in the game and finding a location to teleport them into.
         players.forEach { player ->
@@ -18,6 +18,6 @@ object PlayerLocationSelectionStateLogic : TurfWarsGameStateLogic {
             bukkitPlayer.teleport(spawn.toBukkitLocation(bukkitPlayer.world))
         }
 
-        return MinigameState.IN_GAME
+        return MinigameState.TURF_BUILD
     }
 }

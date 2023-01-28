@@ -22,7 +22,7 @@ object TurfWarsDisplayProvider : PlayerDisplayProvider {
     override fun provideScoreboardDisplay(player: TurfPlayer): PlayerScoreboardDisplayData? {
         val game = player.game ?: return null
 
-        return with(TurfWarsLogic) { game.getScoreboardLines(player) }?.let {
+        return with(TurfWarsLogic) { game.getScoreboardLines(player) }.let {
             PlayerScoreboardDisplayData(TurfWarsLogic.gameScoreboardTitle, it)
         }
     }

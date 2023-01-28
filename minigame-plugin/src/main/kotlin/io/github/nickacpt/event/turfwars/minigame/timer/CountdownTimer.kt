@@ -1,8 +1,9 @@
 package io.github.nickacpt.event.turfwars.minigame.timer
 
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
+import net.kyori.adventure.text.Component
 
-abstract class CountdownTimer(protected val game: TurfWarsGame, private val totalSeconds: Int) {
+open class CountdownTimer(protected val game: TurfWarsGame, private val totalSeconds: Int) {
     companion object {
         const val TICKS_PER_SECOND = 20
     }
@@ -11,14 +12,15 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
         require(totalSeconds > 0) { "Total seconds must be greater than 0" }
     }
 
+    val remainingTime get() = realRemainingTime.coerceAtMost(totalSeconds)
+
     var isRunning = false
         private set
-    var remainingTime = totalSeconds
-        private set
+    private var realRemainingTime = totalSeconds + 1
     private var tickCount = 0
 
-    val hasFinished: Boolean
-        get() = remainingTime == 0
+    val isFinished: Boolean
+        get() = realRemainingTime == 0
 
     fun restart() {
         reset()
@@ -27,7 +29,7 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
 
     fun reset() {
         isRunning = false
-        remainingTime = totalSeconds
+        realRemainingTime = totalSeconds + 1
     }
 
     fun start() {
@@ -38,6 +40,8 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
         isRunning = false
     }
 
+    fun remainingTime() = Component.text("$remainingTime second${if (remainingTime == 1) "" else "s"}")
+
     open fun onTick(secondsLeft: Int) {}
 
     open fun onFinish() {}
@@ -46,20 +50,16 @@ abstract class CountdownTimer(protected val game: TurfWarsGame, private val tota
      * Ticks the timer, 20 times per second
      */
     fun tick() {
-        if (!isRunning) return
+        if (!isRunning || isFinished) return
         if (tickCount-- > 0) return
         tickCount = TICKS_PER_SECOND
 
-        when (remainingTime) {
+        when (--realRemainingTime) {
             0 -> {
                 onFinish()
             }
-
             else -> {
-                onTick(remainingTime)
-
-                // Only change the remaining time after the tick
-                remainingTime--
+                onTick(realRemainingTime)
             }
         }
     }

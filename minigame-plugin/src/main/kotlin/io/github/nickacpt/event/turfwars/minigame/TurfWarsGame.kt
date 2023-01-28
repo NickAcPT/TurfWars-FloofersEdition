@@ -91,4 +91,8 @@ data class TurfWarsGame internal constructor(
     override fun audiences(): Iterable<Audience> {
         return listOf(*playersMap.values.toTypedArray(), consoleAudience)
     }
+
+    fun refreshPlayers() {
+        players.forEach { it.refresh() }
+    }
 }
