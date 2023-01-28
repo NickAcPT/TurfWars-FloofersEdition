@@ -11,7 +11,6 @@ import io.github.nickacpt.event.turfwars.utils.PrefixGameConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.ForwardingAudience
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Location
 import java.util.*
 
 data class TurfWarsGame internal constructor(
@@ -28,18 +27,6 @@ data class TurfWarsGame internal constructor(
                 this.refresh()
             }
     }
-
-    private val playerPlacedBlocksSet = mutableSetOf<Location>()
-
-    fun addPlayerPlacedBlock(location: Location) {
-        playerPlacedBlocksSet.add(location)
-    }
-
-    fun removePlayerPlacedBlock(location: Location) {
-        playerPlacedBlocksSet.remove(location)
-    }
-
-    fun isBlockPlacedByPlayer(location: Location) = playerPlacedBlocksSet.contains(location)
 
     private val consoleAudience = PrefixGameConsoleProxyAudience(this)
 

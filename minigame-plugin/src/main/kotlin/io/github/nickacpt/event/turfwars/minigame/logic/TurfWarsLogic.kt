@@ -19,7 +19,7 @@ import kotlin.math.max
 object TurfWarsLogic {
 
     fun TurfWarsGame.canBreakBlock(player: TurfPlayer, block: Block): Boolean {
-        return player.team != this.spectatorTeam && this.isBlockPlacedByPlayer(block.location)
+        return player.team != this.spectatorTeam && player.team?.isBlockPlacedByPlayer(block.location) == true
     }
 
 
