@@ -1,3 +1,5 @@
+forget-players-on-quit = false
+
 [tags]
 floof = "<#a0db41><bold>FLOOF</bold>"
 

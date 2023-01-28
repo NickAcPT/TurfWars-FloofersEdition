@@ -27,7 +27,13 @@ object TurfPlayerManager : Listener {
     }
 
     private fun unloadTurfPlayer(e: PlayerQuitEvent) {
-        val player = loadedPlayers.remove(e.player.uniqueId)
+        val shouldForgetPlayer = CorePlugin.instance.config.forgetPlayersOnQuit
+        val player = if (shouldForgetPlayer) {
+            loadedPlayers.remove(e.player.uniqueId)
+        } else {
+            loadedPlayers[e.player.uniqueId]
+        }
+
         if (player != null) {
             savePlayerData(player.uuid, player.data)
         }
