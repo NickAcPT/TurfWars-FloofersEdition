@@ -6,14 +6,30 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import io.github.nickacpt.event.turfwars.minigame.logic.states.game.BaseTurfStateLogic
+import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
+import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.block.Block
 import kotlin.math.max
 
 object TurfWarsLogic {
+
+    fun TurfWarsGame.canBreakBlock(player: TurfPlayer, block: Block): Boolean {
+        return player.team != this.spectatorTeam && this.isBlockPlacedByPlayer(block.location)
+    }
+
+
+    fun TurfWarsGame.onAddPlayerToTeam(player: TurfPlayer, team: TurfWarsTeam) {
+
+    }
+
+    fun TurfWarsGame.onRemovePlayerFromTeam(player: TurfPlayer, team: TurfWarsTeam) {
+
+    }
 
     private fun TurfWarsGame.moveToNextState(previousState: MinigameState): MinigameState? {
         val logics = previousState.stateLogics

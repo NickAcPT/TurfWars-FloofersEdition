@@ -62,4 +62,8 @@ interface MinigameLocale {
         @Placeholder("team") team: Component
     )
 
+    @ActionBar
+    @Message("minigame.block-break-not-allowed")
+    fun breakBlockNotAllowed(@Receiver player: TurfPlayer)
+
 }

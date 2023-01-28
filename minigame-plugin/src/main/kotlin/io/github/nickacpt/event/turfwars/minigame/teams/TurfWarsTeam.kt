@@ -7,6 +7,7 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.config.ConfigurationLocation
 import io.github.nickacpt.event.turfwars.config.PlayerSpawnsConfig
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
+import io.github.nickacpt.event.turfwars.minigame.logic.TurfWarsLogic
 import io.github.nickacpt.event.turfwars.utils.PrefixTeamConsoleProxyAudience
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.audience.ForwardingAudience
@@ -59,6 +60,7 @@ data class TurfWarsTeam(
         player.team = this
 
         debug("Player ${player.name} is now part of the team.")
+        with(TurfWarsLogic) { game.onAddPlayerToTeam(player, this@TurfWarsTeam) }
     }
 
     fun removePlayer(player: TurfPlayer) {
@@ -66,6 +68,7 @@ data class TurfWarsTeam(
         player.team = null
 
         debug("Player ${player.name} is no longer part of the team.")
+        with(TurfWarsLogic) { game.onAddPlayerToTeam(player, this@TurfWarsTeam) }
     }
 
     inline fun debug(message: String) {
