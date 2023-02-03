@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.turfwars.commands.raw
+package io.github.nickacpt.event.turfwars.commands.raw.model
 
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
 import java.util.*

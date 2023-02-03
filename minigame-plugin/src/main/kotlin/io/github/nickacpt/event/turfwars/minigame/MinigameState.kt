@@ -27,6 +27,8 @@ enum class MinigameState(private val description: String, vararg val stateLogics
     ENDING("<red>Ending");
 
     companion object {
+        fun firstGameStartState() = TEAM_SELECTION
+
         fun waitingForPlayersStates() = arrayOf(WAITING, STARTING, TEAM_SELECTION)
 
         fun inGameStates() = arrayOf(TURF_BUILD, TURF_COMBAT)

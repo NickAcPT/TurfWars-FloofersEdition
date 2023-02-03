@@ -36,6 +36,8 @@ data class TurfWarsGame internal constructor(
     val playerCount get() = playersMap.values.count { it.team != spectatorTeam }
     val timers = GameTimers(this)
 
+    internal var forceStart: Boolean = false
+
     val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false) { it.spectator }
     val teams = mutableListOf(
         spectatorTeam,
@@ -47,6 +49,7 @@ data class TurfWarsGame internal constructor(
         set(value) {
             field = value
             debug("Game state changed to $value")
+            refreshPlayers()
         }
 
     fun addPlayer(player: TurfPlayer) {

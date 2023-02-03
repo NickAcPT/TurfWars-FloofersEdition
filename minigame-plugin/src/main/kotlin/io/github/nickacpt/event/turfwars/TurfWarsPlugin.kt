@@ -1,6 +1,7 @@
 package io.github.nickacpt.event.turfwars
 
 import io.github.nickacpt.event.core.display.PlayerDisplayManager
+import io.github.nickacpt.event.turfwars.commands.game.GameManagementCommands
 import io.github.nickacpt.event.turfwars.commands.raw.RawInformationCommands
 import io.github.nickacpt.event.turfwars.config.MinigameLocale
 import io.github.nickacpt.event.turfwars.config.TurfWarsConfig
@@ -36,7 +37,7 @@ class TurfWarsPlugin : JavaPlugin() {
 
     override fun onEnable() {
         val commandManager = TurfCommandManager(this)
-        commandManager.annotationParser.parse(RawInformationCommands)
+        commandManager.parseCommands(RawInformationCommands, GameManagementCommands)
 
         Bukkit.getPluginManager().registerEvents(PlayerEvents, this)
         Bukkit.getPluginManager().registerEvents(LobbyEvents, this)

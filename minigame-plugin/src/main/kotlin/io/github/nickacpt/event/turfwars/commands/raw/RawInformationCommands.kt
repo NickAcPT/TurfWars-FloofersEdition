@@ -3,6 +3,10 @@ package io.github.nickacpt.event.turfwars.commands.raw
 import cloud.commandframework.annotations.CommandMethod
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.nickacpt.event.core.players.TurfPlayer
+import io.github.nickacpt.event.turfwars.commands.raw.model.RawGameInformation
+import io.github.nickacpt.event.turfwars.commands.raw.model.RawGameResult
+import io.github.nickacpt.event.turfwars.commands.raw.model.RawTeamInformation
+import io.github.nickacpt.event.turfwars.commands.raw.model.RawTeamResult
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame.Companion.game
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 import net.kyori.adventure.text.Component

@@ -1,4 +1,4 @@
-package io.github.nickacpt.event.turfwars.commands.raw
+package io.github.nickacpt.event.turfwars.commands.raw.model
 
 data class RawGameResult(
     val game: RawGameInformation?,

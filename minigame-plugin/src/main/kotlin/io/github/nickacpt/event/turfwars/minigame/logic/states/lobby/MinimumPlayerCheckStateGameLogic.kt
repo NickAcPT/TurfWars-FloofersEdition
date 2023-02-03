@@ -6,5 +6,5 @@ import io.github.nickacpt.event.turfwars.minigame.logic.states.TurfWarsGameState
 
 abstract class MinimumPlayerCheckStateGameLogic : TurfWarsGameStateLogic {
     // Whether we have enough players to start a game.
-    val TurfWarsGame.hasMinimumPlayersToStart get() = playerCount >= TurfWarsPlugin.config.game.minimumPlayers
+    val TurfWarsGame.hasMinimumPlayersToStart get() = forceStart || playerCount >= TurfWarsPlugin.config.game.minimumPlayers
 }

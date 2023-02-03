@@ -49,7 +49,6 @@ object TurfWarsLogic {
         val nextState = moveToNextState(currentState)
         if (nextState != null && nextState != currentState) {
             state = nextState
-            players.forEach { it.refresh() }
         }
     }
 
