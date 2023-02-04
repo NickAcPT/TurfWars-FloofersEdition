@@ -9,6 +9,7 @@ import io.github.nickacpt.event.core.handlers.ChatEvents
 import io.github.nickacpt.event.core.handlers.WorldEvents
 import io.github.nickacpt.event.core.players.TurfPlayerManager
 import io.github.nickacpt.event.core.tags.TagsManager
+import io.github.nickacpt.event.database.Database
 import io.github.nickacpt.event.utils.TurfCommandManager
 import io.github.nickacpt.event.utils.getConfigurationFileProvider
 import io.github.nickacpt.event.utils.moonshine
@@ -32,6 +33,9 @@ class CorePlugin : JavaPlugin() {
 
 
     override fun onEnable() {
+        // Initialize database connection
+        Database.init(config.database.url, config.database.username, config.database.password)
+
         // Yeet all the commands from the server
         filterCommandTask = Bukkit.getScheduler().runTaskTimer(
             this,

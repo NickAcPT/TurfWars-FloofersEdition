@@ -19,4 +19,7 @@ dependencies {
 
     library(api("cloud.commandframework", "cloud-paper", "1.8.0")!!)
     library(api("cloud.commandframework", "cloud-annotations", "1.8.0")!!)
+
+    library(implementation("com.zaxxer:HikariCP:5.0.1")!!)
+    library(api("org.postgresql:postgresql:42.5.3")!!)
 }

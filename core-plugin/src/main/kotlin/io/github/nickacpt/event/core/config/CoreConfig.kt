@@ -5,4 +5,5 @@ data class CoreConfig(
     val tags: Map<String, String> = emptyMap(),
     val adminTags: Map<String, String> = emptyMap(),
     val scoreboard: ScoreboardConfig = ScoreboardConfig(emptyList()),
+    val database: DatabaseConfig = DatabaseConfig(),
 )

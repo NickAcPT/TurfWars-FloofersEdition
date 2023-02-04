@@ -15,3 +15,8 @@ lines = [
     "",
     "<gray>turfwars.nickac.dev",
 ]
+
+[database]
+url = "jdbc:postgresql://localhost:5432/floofers"
+username = "floofers"
+password = "floofers"
