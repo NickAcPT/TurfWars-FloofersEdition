@@ -2,7 +2,7 @@ package io.github.nickacpt.event.core.tags
 
 import io.github.nickacpt.event.core.CorePlugin.Companion.logger
 import io.github.nickacpt.event.core.io.DatabaseTagsFunctions
-import io.github.nickacpt.event.database.getDatabaseProxy
+import io.github.nickacpt.event.utils.getDatabaseProxy
 
 object TagsManager {
 
@@ -20,6 +20,10 @@ object TagsManager {
         }
 
         logger.info("Loaded ${tags.size} tags!")
+    }
+
+    fun findById(id: Int?): PlayerTag? {
+        return tags.firstOrNull { it.databaseId == id }
     }
 
     fun findByName(currentTagName: String?): PlayerTag? {

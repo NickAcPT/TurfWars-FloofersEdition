@@ -33,7 +33,7 @@ object Database {
         return obj
     }
 
-    fun getTypeForSingleObject(method: Method): Class<*> {
+    private fun getTypeForSingleObject(method: Method): Class<*> {
         val returnType = method.returnType
         val isListReturn = returnType == List::class.java
 
@@ -63,13 +63,6 @@ object Database {
     }
 
     private fun resultSetToObject(resultSet: ResultSet, returnType: Class<*>): Any? {
-        // Short circuit if it's a void method or a Unit method
-        if (returnType == Void.TYPE) {
-            return null
-        } else if (returnType == Unit::class.java) {
-            return Unit
-        }
-
         val isSoloResult = resultSet.metaData.columnCount == 1
 
         if (isSoloResult) {
@@ -82,8 +75,4 @@ object Database {
 
         return returnType.cast(converter.createObjectFromDatabase(resultSet))
     }
-}
-
-inline fun <reified T> getDatabaseProxy(): T {
-    return Database.getProxyForInterface(T::class.java) as T
 }

@@ -20,7 +20,7 @@ class TurfPlayer(val uuid: UUID, val data: TurfPlayerData) : ForwardingAudience.
 
     internal val trackingSidebarData = TrackingPlayerScoreboardDisplayData(null, null)
 
-    var currentTag: PlayerTag = TagsManager.findByName(data.currentTagName) ?: TagsManager.tags.first()
+    var currentTag: PlayerTag = data.currentTag ?: TagsManager.tags.first()
 
     val name get() = bukkitPlayer?.name ?: "Unknown($uuid)"
 

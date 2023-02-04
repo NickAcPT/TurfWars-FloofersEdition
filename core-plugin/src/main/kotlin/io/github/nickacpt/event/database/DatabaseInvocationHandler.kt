@@ -39,7 +39,11 @@ internal object DatabaseInvocationHandler : AbstractInvocationHandler() {
         }
 
         return statement.use {
-            Database.resultSetToObjects(statement.executeQuery(), method)
+            if (statement.execute()) {
+                Database.resultSetToObjects(statement.resultSet, method)
+            } else {
+                null
+            }
         }
     }
 }
