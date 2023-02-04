@@ -1,12 +1,5 @@
 forget-players-on-quit = false
 
-[tags]
-floof = "<#a0db41><bold>FLOOF</bold>"
-
-[admin-tags]
-dev = "<#d80000><bold>DEVELOPER</bold>"
-parkour_master = "<#ff0ad2><bold>PARKOUR MASTER</bold>"
-
 [scoreboard]
 lines = [
     "<gray><date:'MM/dd/yyyy'>",

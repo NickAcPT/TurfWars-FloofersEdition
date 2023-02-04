@@ -31,7 +31,6 @@ class CorePlugin : JavaPlugin() {
     val i18n: I18nConfiguration by getConfigurationFileProvider()
     val messages: CoreMessages = moonshine(i18n)
 
-
     override fun onEnable() {
         // Initialize database connection
         Database.init(config.database.url, config.database.username, config.database.password)

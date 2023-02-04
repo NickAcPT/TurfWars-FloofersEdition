@@ -1,26 +1,25 @@
 package io.github.nickacpt.event.core.tags
 
-import io.github.nickacpt.event.core.CorePlugin
 import io.github.nickacpt.event.core.CorePlugin.Companion.logger
-import net.kyori.adventure.text.minimessage.MiniMessage.miniMessage
+import io.github.nickacpt.event.core.io.DatabaseTagsFunctions
+import io.github.nickacpt.event.database.getDatabaseProxy
 
 object TagsManager {
+
+    private val tagsIo by lazy { getDatabaseProxy<DatabaseTagsFunctions>() }
 
     private val tagsMutable = mutableListOf<PlayerTag>()
     val tags: List<PlayerTag> = tagsMutable
 
     fun loadTags() {
-        val config = CorePlugin.instance.config
-
         logger.info("Loading tags...")
-        config.tags.forEach { (key, value) -> registerTag(key, value, false) }
-        config.adminTags.forEach { (key, value) -> registerTag(key, value, true) }
-        logger.info("Loaded ${tags.size} tags!")
-    }
 
-    private fun registerTag(key: String, value: String, adminOnly: Boolean) {
-        logger.info("Registering ${if (!adminOnly) "" else "admin-only "}tag \"$key\"")
-        tagsMutable.add(PlayerTag(key, miniMessage().deserialize(value), adminOnly))
+        tagsIo.getTags().forEach { tag ->
+            logger.info("Registering ${if (!tag.adminOnly) "" else "admin-only "}tag \"${tag.name}\"")
+            tagsMutable.add(tag)
+        }
+
+        logger.info("Loaded ${tags.size} tags!")
     }
 
     fun findByName(currentTagName: String?): PlayerTag? {
