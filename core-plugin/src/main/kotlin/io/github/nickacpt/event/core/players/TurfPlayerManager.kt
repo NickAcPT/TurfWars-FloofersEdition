@@ -65,7 +65,7 @@ object TurfPlayerManager : Listener {
         }
     }
 
-    @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
+    @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
     fun onJoin(e: AsyncPlayerPreLoginEvent) {
         // Calling get will initialize the player instance if it doesn't exist
         getOrLoadTurfPlayer(e.uniqueId)

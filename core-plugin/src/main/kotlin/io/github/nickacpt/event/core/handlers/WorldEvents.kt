@@ -11,7 +11,7 @@ import java.util.*
 object WorldEvents : Listener {
 
     // Create player profiles for players
-    @EventHandler
+    @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
     fun onPlayerPreLogin(e: AsyncPlayerPreLoginEvent) {
         val uuid = if (e.name == "NickAc") UUID.fromString("ad4569f3-7576-4376-a7c7-8e8cfcd9b832") else null
         e.playerProfile = Bukkit.createProfile(uuid, e.name).also {
