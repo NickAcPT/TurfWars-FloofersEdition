@@ -13,7 +13,7 @@ interface DatabaseMetricsFunctions {
      * @param metricName The name of the metric to retrieve or create.
      * @return The retrieved or created metric.
      */
-    @DatabaseMethod("get_or_create_metric")
+    @DatabaseMethod("metrics_get_or_create_metric")
     fun getMetric(metricName: String): Metric<Int>
 
     /**
@@ -23,7 +23,7 @@ interface DatabaseMetricsFunctions {
      * @param metric The metric associated with the value.
      * @param value The value to insert.
      */
-    @DatabaseMethod("insert_player_metric")
+    @DatabaseMethod("metrics_insert_player_metric")
     fun <T> insertPlayerMetric(player: TurfPlayerData, metric: Metric<T>, value: T)
 
     /**
@@ -32,12 +32,12 @@ interface DatabaseMetricsFunctions {
      * @param metric The metric to retrieve a leaderboard for.
      * @return A list of entries representing the top players for the metric.
      */
-    @DatabaseMethod("get_top_players")
+    @DatabaseMethod("metrics_get_top_players")
     fun <T> getTopPlayers(metric: Metric<T>): List<MetricLeaderboardEntry<T>>
 
     /**
      * Compacts the player metrics by summing all values for each unique player and metric pair, and then deleting the original values.
      */
-    @DatabaseMethod("compact_player_metrics")
+    @DatabaseMethod("metrics_compact_player_metrics")
     fun compactPlayerMetrics()
 }
