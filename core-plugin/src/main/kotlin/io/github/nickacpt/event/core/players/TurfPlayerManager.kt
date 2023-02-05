@@ -1,6 +1,5 @@
 package io.github.nickacpt.event.core.players
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.nickacpt.event.core.CorePlugin
 import io.github.nickacpt.event.core.io.DatabasePlayersFunctions
 import io.github.nickacpt.event.utils.getDatabaseProxy
@@ -16,17 +15,14 @@ object TurfPlayerManager : Listener {
     private val playersIo by lazy {
         getDatabaseProxy<DatabasePlayersFunctions>()
     }
-    private val mapper = jacksonObjectMapper()
     private val loadedPlayers = mutableMapOf<UUID, TurfPlayer>()
 
     val players: Collection<TurfPlayer>
         get() = loadedPlayers.values
 
-    private fun initializePlayerInstance(uuid: UUID) = TurfPlayer(uuid, loadPlayerData(uuid))
-
-    fun getOrLoadTurfPlayer(uuid: UUID): TurfPlayer {
+    fun getOrLoadTurfPlayer(uuid: UUID, name: String? = null): TurfPlayer {
         getMutex(uuid).acquire()
-        return loadedPlayers.getOrPut(uuid) { initializePlayerInstance(uuid) }.also {
+        return loadedPlayers.getOrPut(uuid) { TurfPlayer(uuid, loadPlayerData(uuid, name)) }.also {
             getMutex(uuid).release()
         }
     }
@@ -49,14 +45,14 @@ object TurfPlayerManager : Listener {
         return playerLoadMutexMap.getOrPut(uuid) { Semaphore(1) }
     }
 
-    private fun loadPlayerData(uuid: UUID): TurfPlayerData {
+    private fun loadPlayerData(uuid: UUID, name: String? = null): TurfPlayerData {
         CorePlugin.logger.info("Loading player data for $uuid")
-        return playersIo.getPlayerDataById(uuid)
+        return playersIo.getPlayerDataById(uuid, name)
     }
 
     private fun savePlayerData(uuid: UUID, data: TurfPlayerData) {
         CorePlugin.logger.info("Saving player data for $uuid")
-        playersIo.updatePlayerData(uuid, data.currentTag)
+        playersIo.updatePlayerData(uuid, data.name, data.currentTag)
     }
 
     fun saveAll() {
@@ -67,8 +63,8 @@ object TurfPlayerManager : Listener {
 
     @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
     fun onJoin(e: AsyncPlayerPreLoginEvent) {
-        // Calling get will initialize the player instance if it doesn't exist
-        getOrLoadTurfPlayer(e.uniqueId)
+        // Calling getOrLoadTurfPlayer will initialize the player instance if it doesn't exist
+        getOrLoadTurfPlayer(e.uniqueId, e.name)
     }
 
     @EventHandler(priority = org.bukkit.event.EventPriority.MONITOR)

@@ -56,16 +56,17 @@ create or replace function metrics_get_top_players(
 )
     returns table
             (
-                player_id uuid,
-                value     int
+                player_name text,
+                value       int
             )
     language sql
 as
 $$
-select pm.player_id as player_id, sum(pm.value) as value
+select p.name as player_name, sum(pm.value) as value
 from player_metrics pm
+         inner join players p on p.id = pm.player_id
 where pm.metric_id = $1
-group by pm.player_id
+group by p.name
 order by value desc
 $$;
 
