@@ -6,7 +6,9 @@ import io.github.nickacpt.event.core.commands.LocRawCommand
 import io.github.nickacpt.event.core.config.CoreConfig
 import io.github.nickacpt.event.core.display.PlayerDisplayManager
 import io.github.nickacpt.event.core.handlers.ChatEvents
+import io.github.nickacpt.event.core.handlers.PlayerMetricEvents
 import io.github.nickacpt.event.core.handlers.WorldEvents
+import io.github.nickacpt.event.core.metrics.PlayerMetricsManager
 import io.github.nickacpt.event.core.players.TurfPlayerManager
 import io.github.nickacpt.event.core.tags.TagsManager
 import io.github.nickacpt.event.database.Database
@@ -51,11 +53,14 @@ class CorePlugin : JavaPlugin() {
         // Loads all tags
         TagsManager.loadTags()
 
+        // Initialize player metrics manager
+        PlayerMetricsManager.init()
+
         // Register events
-        Bukkit.getPluginManager().registerEvents(ChatEvents, this)
         Bukkit.getPluginManager().registerEvents(ChatEvents, this)
         Bukkit.getPluginManager().registerEvents(WorldEvents, this)
         Bukkit.getPluginManager().registerEvents(TurfPlayerManager, this)
+        Bukkit.getPluginManager().registerEvents(PlayerMetricEvents, this)
         Bukkit.getPluginManager().registerEvents(PlayerDisplayManager, this)
     }
 

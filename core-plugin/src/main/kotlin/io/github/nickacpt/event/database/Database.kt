@@ -19,7 +19,6 @@ object Database {
             driverClassName = "org.postgresql.Driver"
             username = user
             password = pwd
-            maximumPoolSize = 6
         })
     }
 

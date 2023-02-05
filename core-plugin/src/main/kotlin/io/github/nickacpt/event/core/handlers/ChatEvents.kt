@@ -16,10 +16,15 @@ object ChatEvents : Listener {
         e.viewers().remove(Bukkit.getConsoleSender())
 
         e.renderer(viewerUnaware { source, _, message ->
-            CorePlugin.instance.messages.chatMessage(source, message).also {
-                Bukkit.getConsoleSender().sendMessage(it)
-            }
+            CorePlugin.instance.messages.chatMessage(source, message)
         })
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    @Suppress("OverrideOnly")
+    fun onFinalChat(e: AsyncChatEvent) {
+        Bukkit.getConsoleSender().also {
+            it.sendMessage(e.renderer().render(e.player, e.player.name(), e.message(), it))
+        }
+    }
 }

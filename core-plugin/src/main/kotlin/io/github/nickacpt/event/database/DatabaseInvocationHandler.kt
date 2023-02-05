@@ -5,6 +5,8 @@ import java.lang.reflect.Method
 import java.sql.PreparedStatement
 
 internal object DatabaseInvocationHandler : AbstractInvocationHandler() {
+    private val connection by lazy { Database.connection }
+
     private val preparedStatementCache = mutableMapOf<String, String>()
 
     private fun cleanupMethodName(method: Method): String {
@@ -24,7 +26,7 @@ internal object DatabaseInvocationHandler : AbstractInvocationHandler() {
 
         val name = cleanupMethodName(method)
 
-        return Database.connection.prepareStatement(
+        return connection.prepareStatement(
             preparedStatementCache.getOrPut(name) {
                 "$prefix $name(${method.parameters.joinToString(",") { "?" }})"
             }
