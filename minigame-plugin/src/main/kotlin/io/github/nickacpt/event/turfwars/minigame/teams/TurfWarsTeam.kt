@@ -16,13 +16,13 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import java.util.*
 
-data class TurfWarsTeam(
+abstract class TurfWarsTeam(
     val game: TurfWarsGame,
     val name: String,
     val color: NamedTextColor,
-    val playable: Boolean = true,
     val spawnProvider: (PlayerSpawnsConfig) -> ConfigurationLocation
 ) : ForwardingAudience {
+    abstract val playable: Boolean
 
     companion object {
         // Since TurfWars is known to have only two teams, we can evenly split the max count in 2
@@ -64,6 +64,10 @@ data class TurfWarsTeam(
         it.append(Component.text("Team"))
         it.color(color)
     }
+
+    open fun onAddPlayer(player: TurfPlayer) {}
+
+    open fun onRemovePlayer(player: TurfPlayer) {}
 
     fun addPlayer(player: TurfPlayer) {
         // Remove player from previous team

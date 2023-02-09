@@ -4,7 +4,8 @@ import io.github.nickacpt.event.core.players.TurfPlayer
 import io.github.nickacpt.event.core.players.TurfPlayerDataKey
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.logic.TurfWarsLogic
-import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
+import io.github.nickacpt.event.turfwars.minigame.teams.SpectatorTeam
+import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsPlayerTeam
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 import io.github.nickacpt.event.turfwars.minigame.timer.GameTimers
 import io.github.nickacpt.event.turfwars.utils.PrefixGameConsoleProxyAudience
@@ -38,11 +39,11 @@ data class TurfWarsGame internal constructor(
 
     internal var forceStart: Boolean = false
 
-    val spectatorTeam = TurfWarsTeam(this, "Spectator", NamedTextColor.GRAY, playable = false) { it.spectator }
+    val spectatorTeam = SpectatorTeam(this)
     val teams = mutableListOf(
         spectatorTeam,
-        TurfWarsTeam(this, "Red", NamedTextColor.RED) { it.red.random() },
-        TurfWarsTeam(this, "Blue", NamedTextColor.BLUE) { it.blue.random() },
+        TurfWarsPlayerTeam(this, NamedTextColor.RED) { it.red.random() },
+        TurfWarsPlayerTeam(this, NamedTextColor.BLUE) { it.blue.random() },
     )
 
     var state: MinigameState = MinigameState.INITIALIZING
