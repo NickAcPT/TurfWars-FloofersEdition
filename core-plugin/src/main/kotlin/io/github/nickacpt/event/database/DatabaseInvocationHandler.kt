@@ -10,11 +10,21 @@ internal object DatabaseInvocationHandler : AbstractInvocationHandler() {
     private val preparedStatementCache = mutableMapOf<String, String>()
 
     private fun cleanupMethodName(method: Method): String {
-        if (method.isAnnotationPresent(DatabaseMethod::class.java)) {
-            return method.getAnnotation(DatabaseMethod::class.java).name
+        val schema = if (method.declaringClass.isAnnotationPresent(DatabaseSchema::class.java)) {
+            method.declaringClass.getAnnotation(DatabaseSchema::class.java).name
+        } else if (method.isAnnotationPresent(DatabaseSchema::class.java)) {
+            method.getAnnotation(DatabaseSchema::class.java).name
+        } else {
+            "public"
         }
 
-        return method.name
+        val name = if (method.isAnnotationPresent(DatabaseMethod::class.java)) {
+            method.getAnnotation(DatabaseMethod::class.java).name
+        } else {
+            method.name
+        }
+
+        return "$schema.$name"
     }
 
     private fun getPreparedStatementForMethod(method: Method): PreparedStatement {
