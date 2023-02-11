@@ -9,7 +9,7 @@ object TurfPlayerApiManager {
         getDatabaseProxy<DatabaseApiFunctions>()
     }
 
-    fun createNewApiKey(player: TurfPlayerData): UUID {
+    suspend fun createNewApiKey(player: TurfPlayerData): UUID {
         return apiIo.createNewApiKey(player)
     }
 }

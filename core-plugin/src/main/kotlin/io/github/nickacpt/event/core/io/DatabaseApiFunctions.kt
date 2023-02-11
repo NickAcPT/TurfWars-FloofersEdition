@@ -13,5 +13,5 @@ interface DatabaseApiFunctions {
      * @return The API key.
      */
     @DatabaseMethod("api_create_new_api_key")
-    fun createNewApiKey(player: TurfPlayerData): UUID
+    suspend fun createNewApiKey(player: TurfPlayerData): UUID
 }

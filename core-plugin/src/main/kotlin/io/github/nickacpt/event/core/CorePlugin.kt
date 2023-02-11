@@ -1,6 +1,7 @@
 package io.github.nickacpt.event.core
 
 import io.github.nickacpt.event.config.i18n.I18nConfiguration
+import io.github.nickacpt.event.core.commands.ApiCommand
 import io.github.nickacpt.event.core.commands.FakeBukkitCommands
 import io.github.nickacpt.event.core.commands.LocRawCommand
 import io.github.nickacpt.event.core.config.CoreConfig
@@ -45,7 +46,7 @@ class CorePlugin : JavaPlugin() {
         )
 
         val commandManager = TurfCommandManager(this)
-        commandManager.annotationParser.parse(FakeBukkitCommands)
+        commandManager.parseCommands(ApiCommand, FakeBukkitCommands)
 
         // Register locraw command
         getCommand("locraw")?.setExecutor(LocRawCommand)

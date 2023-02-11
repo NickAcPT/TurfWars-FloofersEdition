@@ -13,14 +13,13 @@ import org.bukkit.Bukkit
 object ApiCommand {
 
     @CommandMethod("new")
-    fun newApiKey(sender: TurfPlayer) {
-        Bukkit.getScheduler().runTaskAsynchronously(CorePlugin.instance, Runnable {
-            sender.sendMessage(Component.text {
-                val key = TurfPlayerApiManager.createNewApiKey(sender.data).toString()
-                it.color(NamedTextColor.GREEN)
-                it.append(Component.text("Your new API key is: "))
-                it.append(Component.text(key).color(NamedTextColor.GOLD).clickEvent(ClickEvent.suggestCommand(key)))
-            })
+    suspend fun newApiKey(sender: TurfPlayer) {
+        val key = TurfPlayerApiManager.createNewApiKey(sender.data).toString()
+
+        sender.sendMessage(Component.text {
+            it.color(NamedTextColor.GREEN)
+            it.append(Component.text("Your new API key is: "))
+            it.append(Component.text(key).color(NamedTextColor.GOLD).clickEvent(ClickEvent.suggestCommand(key)))
         })
 
     }
