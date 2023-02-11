@@ -9,7 +9,7 @@ import kotlin.coroutines.CoroutineContext
 open class MinecraftSchedulerDispatcher(private val async: Boolean) : CoroutineDispatcher() {
 
     override fun isDispatchNeeded(context: CoroutineContext): Boolean {
-        return Bukkit.isPrimaryThread() == async
+        return true
     }
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {

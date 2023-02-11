@@ -5,6 +5,7 @@ import io.github.nickacpt.event.utils.coroutines.CoroutineUtils
 import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Method
 import java.sql.PreparedStatement
+import kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -53,7 +54,7 @@ internal object DatabaseInvocationHandler : AbstractInvocationHandler() {
         val statement = getPreparedStatementForMethod(method)
 
         val parameters = filterParameters(method)
-        @Suppress("UNCHECKED_CAST") val continuation = method.parameters.lastOrNull() as? Continuation<Any>
+        @Suppress("UNCHECKED_CAST") val continuation = args.lastOrNull() as? Continuation<Any>
 
         for (i in parameters.indices) {
             statement.setObject(i + 1, Database.objectToSqlQuery(args[i]))
@@ -73,6 +74,8 @@ internal object DatabaseInvocationHandler : AbstractInvocationHandler() {
             CoroutineUtils.launchAsync {
                 runBlocking { resultFetcher() }?.let { continuation.resume(it) }
             }
+
+            COROUTINE_SUSPENDED
         } else {
             resultFetcher()
         }

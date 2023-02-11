@@ -1,18 +1,21 @@
 package io.github.nickacpt.event.utils.coroutines
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 object CoroutineUtils {
 
-    val scope by lazy { CoroutineScope(MinecraftSchedulerDispatchers.SYNC) }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun launchSync(block: suspend CoroutineScope.() -> Unit) {
-        scope.launch(context = MinecraftSchedulerDispatchers.SYNC, block = block)
+        GlobalScope.launch(context = MinecraftSchedulerDispatchers.SYNC, block = block)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun launchAsync(block: suspend CoroutineScope.() -> Unit) {
-        scope.launch(
+        GlobalScope.launch(
             context = MinecraftSchedulerDispatchers.ASYNC,
             block = block
         )
