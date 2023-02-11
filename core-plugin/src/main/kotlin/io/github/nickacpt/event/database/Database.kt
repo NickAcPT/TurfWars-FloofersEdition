@@ -7,6 +7,9 @@ import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 import java.sql.ResultSet
 import kotlin.reflect.full.companionObjectInstance
+import kotlin.reflect.jvm.javaType
+import kotlin.reflect.jvm.jvmErasure
+import kotlin.reflect.jvm.kotlinFunction
 
 object Database {
     private lateinit var database: HikariDataSource
@@ -40,7 +43,7 @@ object Database {
             ((method.genericReturnType as? ParameterizedType)?.actualTypeArguments?.get(0)) as? Class<*>
                 ?: throw Exception("Unable to get type for list return type")
         } else {
-            method.returnType
+            method.kotlinFunction?.returnType?.jvmErasure?.javaObjectType ?: method.returnType
         }
     }
 

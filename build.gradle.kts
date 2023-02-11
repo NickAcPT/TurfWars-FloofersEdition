@@ -25,14 +25,16 @@ allprojects {
     }
 
     this.dependencies {
-        "implementation"(kotlin("stdlib"))
-        "implementation"(kotlin("reflect"))
+        "api"(kotlin("stdlib"))
+        "api"(kotlin("reflect"))
+        "api"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
         if (isMinecraftPlugin) {
             "compileOnly"("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
 
             if (isCore) {
                 "library"(kotlin("stdlib"))
                 "library"(kotlin("reflect"))
+                "library"("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             } else if (!isReplay) {
                 "implementation"(project(":core-plugin"))
             }
