@@ -1,0 +1,6 @@
+db-uri = "postgres://authenticator:floofersauthenticator@localhost:5432/floofers"
+db-schemas = "api"
+db-anon-role = "web_anon"
+db-pre-request = "api.filter_api_token"
+
+server-port = 8082
