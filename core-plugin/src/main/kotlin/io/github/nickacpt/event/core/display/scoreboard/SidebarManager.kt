@@ -36,7 +36,6 @@ object SidebarManager {
 
         sidebarObjective.displayName(sidebarDisplay.title)
 
-
         val configLines = CorePlugin.instance.config.scoreboard.lines
         val newFinalLines = configLines.flatMap {
             if (it == "%lines%") {

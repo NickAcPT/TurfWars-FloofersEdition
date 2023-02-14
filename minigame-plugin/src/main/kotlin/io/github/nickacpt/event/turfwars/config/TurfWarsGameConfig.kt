@@ -10,12 +10,8 @@ data class TurfWarsGameConfig(
     val combatTime: Int = 60,
     val endTime: Int = 900 /* 15 minutes = 15 * 60 seconds */,
 
-    val playerSpawns: PlayerSpawnsConfig
-)
+    val playerSpawns: PlayerSpawnsConfig,
 
-data class PlayerSpawnsConfig(
-    val spectator: ConfigurationLocation,
-    val red: List<ConfigurationLocation> = emptyList(),
-    val blue: List<ConfigurationLocation> = emptyList()
+    val turfs: TurfRegionsConfig
 )
 

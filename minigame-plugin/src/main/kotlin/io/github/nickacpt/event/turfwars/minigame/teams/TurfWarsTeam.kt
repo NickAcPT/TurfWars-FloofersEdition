@@ -83,6 +83,8 @@ abstract class TurfWarsTeam(
 
         debug("Player ${player.name} is now part of the team.")
         with(TurfWarsLogic) { game.onAddPlayerToTeam(player, this@TurfWarsTeam) }
+
+        onAddPlayer(player)
     }
 
     fun removePlayer(player: TurfPlayer) {
@@ -91,6 +93,8 @@ abstract class TurfWarsTeam(
 
         debug("Player ${player.name} is no longer part of the team.")
         with(TurfWarsLogic) { game.onRemovePlayerFromTeam(player, this@TurfWarsTeam) }
+
+        onRemovePlayer(player)
     }
 
     inline fun debug(message: String) {

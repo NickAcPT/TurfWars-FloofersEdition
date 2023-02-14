@@ -12,7 +12,7 @@ import io.github.nickacpt.event.turfwars.minigame.logic.states.lobby.LobbyCountd
 import io.github.nickacpt.event.turfwars.minigame.logic.states.lobby.PlayerWaitingStateGameLogic
 import io.github.nickacpt.event.turfwars.minigame.timer.LobbyCountdownTimer
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.MiniMessage.miniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 
 enum class MinigameState(private val description: String, vararg val stateLogics: TurfWarsGameStateLogic) {
@@ -52,7 +52,7 @@ enum class MinigameState(private val description: String, vararg val stateLogics
     }
 
     fun descriptionAsComponent(game: TurfWarsGame): Component {
-        return MiniMessage.miniMessage().deserialize(
+        return miniMessage().deserialize(
             description,
             Placeholder.component("time", LobbyCountdownTimer.formatTime(game.timers.lobbyCountdown.remainingTime))
         )

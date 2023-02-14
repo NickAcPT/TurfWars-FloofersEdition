@@ -13,6 +13,39 @@ combat-time = 15
 # The time in seconds that the game lasts (15 minutes)
 end-time = 900
 
+[game.turfs]
+[game.turfs.red]
+[game.turfs.red.pos1]
+x = 30
+y = 74
+z = -5
+[game.turfs.red.pos2]
+x = 34
+y = 74
+z = 5
+
+[game.turfs.red]
+[game.turfs.red.pos1]
+x = 30
+y = 74
+z = -5
+[game.turfs.red.pos2]
+x = 34
+y = 74
+z = 5
+
+[game.turfs.blue]
+[game.turfs.blue.pos1]
+x = 39
+y = 74
+z = 5
+[game.turfs.blue]
+[game.turfs.blue.pos2]
+x = 35
+y = 74
+z = -5
+
+
 [game.player-spawns]
 [game.player-spawns.spectator]
 x = 35.0

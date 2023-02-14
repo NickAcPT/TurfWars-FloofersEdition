@@ -13,7 +13,6 @@ import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
 import net.kyori.adventure.text.JoinConfiguration
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.block.Block
 import kotlin.math.max
 
@@ -30,13 +29,9 @@ object TurfWarsLogic {
 
 
     fun TurfWarsGame.onAddPlayerToTeam(player: TurfPlayer, team: TurfWarsTeam) {
-        // Do whatever the team needs to do
-        team.onAddPlayer(player)
     }
 
     fun TurfWarsGame.onRemovePlayerFromTeam(player: TurfPlayer, team: TurfWarsTeam) {
-        // Do whatever the team needs to do
-        team.onRemovePlayer(player)
     }
 
     private fun TurfWarsGame.moveToNextState(previousState: MinigameState): MinigameState? {
@@ -93,12 +88,10 @@ object TurfWarsLogic {
             if (turfStateLogic != null) {
                 val description = state.descriptionAsComponent(this)
                 list += GroupScoreboardElement(
-                    PlainTextComponentSerializer.plainText().serialize(
-                        Component.join(
-                            JoinConfiguration.separator(space()),
-                            description,
-                            Component.text("Time")
-                        )
+                    Component.join(
+                        JoinConfiguration.separator(space()),
+                        description.color(null),
+                        Component.text("Time")
                     )
                 ) { turfStateLogic.timer(this).remainingTime() }
             }
