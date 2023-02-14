@@ -2,8 +2,6 @@ forget-players-on-quit = false
 
 [scoreboard]
 lines = [
-    "<gray><date:'MM/dd/yyyy'>",
-    "",
     "%lines%",
     "",
     "<gray>turfwars.nickac.dev",

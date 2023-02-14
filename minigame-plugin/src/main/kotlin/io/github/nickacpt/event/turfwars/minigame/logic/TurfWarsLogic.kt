@@ -5,39 +5,20 @@ import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.config
 import io.github.nickacpt.event.turfwars.TurfWarsPlugin.Companion.locale
 import io.github.nickacpt.event.turfwars.minigame.MinigameState
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
+import io.github.nickacpt.event.turfwars.minigame.logic.ScoreboardElement.GroupScoreboardElement
 import io.github.nickacpt.event.turfwars.minigame.logic.states.game.BaseTurfStateLogic
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.team
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
-import net.kyori.adventure.text.ComponentLike
 import net.kyori.adventure.text.JoinConfiguration
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.Style
-import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.block.Block
 import kotlin.math.max
 
+
 object TurfWarsLogic {
-
-    data class ScoreboardElement(val title: Component, val valueFetcher: () -> Any) {
-        constructor(title: String, valueFetcher: () -> Any) : this(
-            Component.text(title, null, TextDecoration.BOLD), valueFetcher
-        )
-
-        fun toComponentList() =
-            listOf(title.style(Style.style(NamedTextColor.YELLOW, TextDecoration.BOLD)), valueToComponent())
-
-        private fun valueToComponent(): Component {
-            val value = valueFetcher()
-            if (value is ComponentLike) {
-                return value.asComponent()
-            }
-
-            return Component.text(value.toString())
-        }
-    }
 
     fun TurfWarsGame.canBreakBlock(player: TurfPlayer, block: Block): Boolean {
         return player.team != this.spectatorTeam && player.team?.isBlockPlacedByPlayer(block.location) == true
@@ -49,11 +30,13 @@ object TurfWarsLogic {
 
 
     fun TurfWarsGame.onAddPlayerToTeam(player: TurfPlayer, team: TurfWarsTeam) {
-
+        // Do whatever the team needs to do
+        team.onAddPlayer(player)
     }
 
     fun TurfWarsGame.onRemovePlayerFromTeam(player: TurfPlayer, team: TurfWarsTeam) {
-
+        // Do whatever the team needs to do
+        team.onRemovePlayer(player)
     }
 
     private fun TurfWarsGame.moveToNextState(previousState: MinigameState): MinigameState? {
@@ -84,14 +67,14 @@ object TurfWarsLogic {
 
         // If the game is waiting for players, we should show the state and the amount of players
         if (state.showsStateInScoreboard()) {
-            list += ScoreboardElement("Players") {
+            list += GroupScoreboardElement("Players") {
                 locale.scoreboardPlayerCount(
                     playerCount,
                     max(config.game.maximumPlayers, playerCount)
                 )
             }
 
-            list += ScoreboardElement("State") { state.descriptionAsComponent(this) }
+            list += GroupScoreboardElement("State") { state.descriptionAsComponent(this) }
         }
 
         // If we are in game, we should show the player's team, the game time left,
@@ -99,18 +82,24 @@ object TurfWarsLogic {
         if (state.isInGame()) {
             // Player's team
             player.team?.also {
-                list += ScoreboardElement("Team") { it.name() }
+                list += GroupScoreboardElement("Team") { it.name() }
             }
 
             // Game time left
-            list += ScoreboardElement("Time Remaining") { timers.gameEndTimer.remainingTime() }
+            list += GroupScoreboardElement("Time Remaining") { timers.gameEndTimer.remainingTime() }
 
             // State time left
             val turfStateLogic = state.stateLogics.firstNotNullOfOrNull { it as? BaseTurfStateLogic }
             if (turfStateLogic != null) {
                 val description = state.descriptionAsComponent(this)
-                list += ScoreboardElement(
-                    Component.join(JoinConfiguration.separator(space()), description, Component.text("Time"))
+                list += GroupScoreboardElement(
+                    PlainTextComponentSerializer.plainText().serialize(
+                        Component.join(
+                            JoinConfiguration.separator(space()),
+                            description,
+                            Component.text("Time")
+                        )
+                    )
                 ) { turfStateLogic.timer(this).remainingTime() }
             }
         }

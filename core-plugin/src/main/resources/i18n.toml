@@ -1,5 +1,5 @@
 [static-placeholders]
-turfwars = "<bold><gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA>Turf Wars</gradient> - <#a0db41>Floofers Edition</#a0db41>"
+turfwars = "<bold><gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA>Turf Wars</gradient>"
 prefix = "<gradient:#D80000:#EC0064:#CC23BA:#6068F9:#008BFF:#009DEA><bold>TurfWars</bold> > </gradient>"
 
 [messages]
