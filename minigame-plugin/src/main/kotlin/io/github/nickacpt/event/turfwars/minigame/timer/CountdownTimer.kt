@@ -2,6 +2,9 @@ package io.github.nickacpt.event.turfwars.minigame.timer
 
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.TextComponent
+import kotlin.time.Duration.Companion.seconds
 
 open class CountdownTimer(protected val game: TurfWarsGame, private val totalSeconds: Int) {
     companion object {
@@ -40,7 +43,17 @@ open class CountdownTimer(protected val game: TurfWarsGame, private val totalSec
         isRunning = false
     }
 
-    fun remainingTime() = Component.text("$remainingTime second${if (remainingTime == 1) "" else "s"}")
+    fun remainingTime(): Component {
+        val timeComponent = remainingTime.seconds.toComponents { minutes, seconds, _ ->
+            val timeComponents =
+                listOf(minutes, seconds.toLong()).takeIf { minutes > 0 }?.map { it.toString().padStart(2, '0') }
+            val components = timeComponents?.map { Component.text(it) }
+
+            components?.let { Component.join(JoinConfiguration.separator(Component.text(":")), it) }
+        }
+
+        return timeComponent ?: Component.text("$remainingTime second${if (remainingTime == 1) "" else "s"}")
+    }
 
     open fun onTick(secondsLeft: Int) {}
 
@@ -58,6 +71,7 @@ open class CountdownTimer(protected val game: TurfWarsGame, private val totalSec
             0 -> {
                 onFinish()
             }
+
             else -> {
                 onTick(realRemainingTime)
             }

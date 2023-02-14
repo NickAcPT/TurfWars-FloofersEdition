@@ -8,6 +8,7 @@ data class TurfWarsGameConfig(
 
     val buildTime: Int = 40,
     val combatTime: Int = 60,
+    val endTime: Int = 900 /* 15 minutes = 15 * 60 seconds */,
 
     val playerSpawns: PlayerSpawnsConfig
 )

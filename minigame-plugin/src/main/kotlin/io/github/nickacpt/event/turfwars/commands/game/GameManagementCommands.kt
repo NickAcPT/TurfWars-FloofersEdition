@@ -37,7 +37,6 @@ object GameManagementCommands {
         }
 
         game.forceStart = true
-        game.state = MinigameState.firstGameStartState()
         player.sendMessage(text("Forced the game to start!", NamedTextColor.YELLOW))
     }
 

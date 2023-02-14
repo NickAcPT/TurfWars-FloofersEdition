@@ -29,11 +29,15 @@ abstract class TurfWarsTeam(
         val maximumPlayerCount get() = TurfWarsPlugin.config.game.maximumPlayers / 2
 
         private val TEAM_TAG = TurfPlayerDataKey<TurfWarsTeam>()
+        private val PLAYABLE_TEAM_TAG = TurfPlayerDataKey<TurfWarsTeam>()
+
+        internal val TurfPlayer.playableTeam get() = this[PLAYABLE_TEAM_TAG]
 
         var TurfPlayer.team
             get() = this[TEAM_TAG]
             set(value) {
                 this[TEAM_TAG] = value
+                if (value?.playable == true) this[PLAYABLE_TEAM_TAG] = value
                 this.refresh()
             }
     }
@@ -86,7 +90,7 @@ abstract class TurfWarsTeam(
         player.team = null
 
         debug("Player ${player.name} is no longer part of the team.")
-        with(TurfWarsLogic) { game.onAddPlayerToTeam(player, this@TurfWarsTeam) }
+        with(TurfWarsLogic) { game.onRemovePlayerFromTeam(player, this@TurfWarsTeam) }
     }
 
     inline fun debug(message: String) {
@@ -94,7 +98,7 @@ abstract class TurfWarsTeam(
     }
 
     override fun audiences(): Iterable<Audience> {
-        return listOf(*players.toTypedArray(), consoleAudience).toList()
+        return listOf(*players.toTypedArray(), consoleAudience)
     }
 
 }

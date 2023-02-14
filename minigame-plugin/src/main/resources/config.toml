@@ -10,6 +10,9 @@ build-time = 15
 # The time in seconds that the battle phase lasts (60 seconds)
 combat-time = 15
 
+# The time in seconds that the game lasts (15 minutes)
+end-time = 900
+
 [game.player-spawns]
 [game.player-spawns.spectator]
 x = 35.0

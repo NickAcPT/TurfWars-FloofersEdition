@@ -39,7 +39,7 @@ class ConfigurationFileProvider<T>(private val clazz: Class<T>) {
             mapper.readValue(file, clazz)
         } catch (e: Exception) {
             val newMap = mapper.readValue(file, jacksonTypeRef<Map<String, Any>>())
-            (I18nConfiguration(mutableMapOf(), flattenMap(newMap)) as? T) ?: throw e
+            (if (name == "i18n") (I18nConfiguration(mutableMapOf(), flattenMap(newMap)) as? T) else null) ?: throw e
         }.also { result ->
             cachedValue = result
             if (result is I18nConfiguration) {

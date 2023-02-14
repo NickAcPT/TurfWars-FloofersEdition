@@ -1,5 +1,6 @@
 package io.github.nickacpt.event.turfwars.minigame
 
+import io.github.nickacpt.event.turfwars.minigame.logic.states.GameEndStateLogic
 import io.github.nickacpt.event.turfwars.minigame.logic.states.InitializingStateGameLogic
 import io.github.nickacpt.event.turfwars.minigame.logic.states.StartingStateLogic
 import io.github.nickacpt.event.turfwars.minigame.logic.states.TurfWarsGameStateLogic
@@ -22,12 +23,13 @@ enum class MinigameState(private val description: String, vararg val stateLogics
     TEAM_SELECTION("<gray>Team selection", LobbyCountdownResetStateLogic, TeamSelectionStateLogic),
     PLAYER_LOCATION_SELECTION("<gray>Player location selection", PlayerLocationSelectionStateLogic),
 
-    TURF_BUILD("<yellow>Turf Build", BuildStateLogic),
-    TURF_COMBAT("<yellow>Turf Combat", CombatStateLogic),
+    TURF_BUILD("<yellow>Turf Build", BuildStateLogic, GameEndStateLogic),
+    TURF_COMBAT("<yellow>Turf Combat", CombatStateLogic, GameEndStateLogic),
     ENDING("<red>Ending");
 
     companion object {
         fun firstGameStartState() = TEAM_SELECTION
+        fun endingGameState() = ENDING
 
         fun waitingForPlayersStates() = arrayOf(WAITING, STARTING, TEAM_SELECTION)
 

@@ -11,15 +11,40 @@ import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam.Companion.t
 import io.github.nickacpt.event.utils.joinTo
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.space
+import net.kyori.adventure.text.ComponentLike
 import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.block.Block
 import kotlin.math.max
 
 object TurfWarsLogic {
 
+    data class ScoreboardElement(val title: Component, val valueFetcher: () -> Any) {
+        constructor(title: String, valueFetcher: () -> Any) : this(
+            Component.text(title, null, TextDecoration.BOLD), valueFetcher
+        )
+
+        fun toComponentList() =
+            listOf(title.style(Style.style(NamedTextColor.YELLOW, TextDecoration.BOLD)), valueToComponent())
+
+        private fun valueToComponent(): Component {
+            val value = valueFetcher()
+            if (value is ComponentLike) {
+                return value.asComponent()
+            }
+
+            return Component.text(value.toString())
+        }
+    }
+
     fun TurfWarsGame.canBreakBlock(player: TurfPlayer, block: Block): Boolean {
         return player.team != this.spectatorTeam && player.team?.isBlockPlacedByPlayer(block.location) == true
+    }
+
+    fun TurfWarsGame.canPlaceBlock(player: TurfPlayer, block: Block): Boolean {
+        return player.team != this.spectatorTeam
     }
 
 
@@ -55,39 +80,42 @@ object TurfWarsLogic {
     val gameScoreboardTitle by lazy { locale.scoreboardTitle() }
 
     fun TurfWarsGame.getScoreboardLines(player: TurfPlayer): List<Component> {
+        val list = mutableListOf<ScoreboardElement>()
+
         // If the game is waiting for players, we should show the state and the amount of players
-        val list = mutableListOf<List<Component>>()
-
         if (state.showsStateInScoreboard()) {
-            list += listOf(
-                Component.text("Players", null, TextDecoration.BOLD),
-                locale.scoreboardPlayerCount(playerCount, max(config.game.maximumPlayers, playerCount))
-            )
-
-            list += listOf(
-                Component.text("State", null, TextDecoration.BOLD),
-                state.descriptionAsComponent(this)
-            )
-        }
-
-        if (state.isInGame()) {
-            val description = state.descriptionAsComponent(this)
-            val turfStateLogic = state.stateLogics.firstNotNullOfOrNull { it as? BaseTurfStateLogic }
-
-            if (turfStateLogic != null) {
-                list += listOf(
-                    Component.join(
-                        JoinConfiguration.separator(space()),
-                        description,
-                        Component.text("Time")
-                    ).mergeStyle(description).decorate(TextDecoration.BOLD),
-                    turfStateLogic.timer(this).remainingTime()
+            list += ScoreboardElement("Players") {
+                locale.scoreboardPlayerCount(
+                    playerCount,
+                    max(config.game.maximumPlayers, playerCount)
                 )
             }
 
+            list += ScoreboardElement("State") { state.descriptionAsComponent(this) }
         }
 
-        return list.joinTo(mutableListOf(), listOf(space())).flatten()
+        // If we are in game, we should show the player's team, the game time left,
+        // and the time left for the current state
+        if (state.isInGame()) {
+            // Player's team
+            player.team?.also {
+                list += ScoreboardElement("Team") { it.name() }
+            }
+
+            // Game time left
+            list += ScoreboardElement("Time Remaining") { timers.gameEndTimer.remainingTime() }
+
+            // State time left
+            val turfStateLogic = state.stateLogics.firstNotNullOfOrNull { it as? BaseTurfStateLogic }
+            if (turfStateLogic != null) {
+                val description = state.descriptionAsComponent(this)
+                list += ScoreboardElement(
+                    Component.join(JoinConfiguration.separator(space()), description, Component.text("Time"))
+                ) { turfStateLogic.timer(this).remainingTime() }
+            }
+        }
+
+        return list.map { it.toComponentList() }.joinTo(mutableListOf(), listOf(space())).flatten()
     }
 
 }

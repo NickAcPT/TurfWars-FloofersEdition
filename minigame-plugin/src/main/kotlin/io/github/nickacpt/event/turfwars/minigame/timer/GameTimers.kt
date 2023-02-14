@@ -9,11 +9,13 @@ data class GameTimers(
     val lobbyCountdown = LobbyCountdownTimer(game)
     val buildCountdown = PlayerRefreshingCountdownTimer(game, TurfWarsPlugin.config.game.buildTime)
     val combatCountdown = PlayerRefreshingCountdownTimer(game, TurfWarsPlugin.config.game.combatTime)
+    val gameEndTimer = CountdownTimer(game, TurfWarsPlugin.config.game.endTime)
 
     private val timersList = listOf(
         lobbyCountdown,
         buildCountdown,
-        combatCountdown
+        combatCountdown,
+        gameEndTimer
     )
 
     /**

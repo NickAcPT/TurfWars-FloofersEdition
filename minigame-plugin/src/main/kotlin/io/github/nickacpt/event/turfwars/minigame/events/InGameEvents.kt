@@ -35,10 +35,7 @@ object InGameEvents : Listener {
 
     @EventHandler
     fun onPlayerBlockPlace(e: BlockPlaceEvent) = e.handleGameEvent(*MinigameState.inGameStates()) { player, game ->
-        if (player.team == game.spectatorTeam) {
-            e.isCancelled = true
-            return@handleGameEvent
-        }
+        e.isCancelled = with(TurfWarsLogic) { !game.canPlaceBlock(player, e.block) }
 
         player.team?.addPlayerPlacedBlock(e.block.location)
     }
