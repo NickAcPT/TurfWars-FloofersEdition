@@ -48,6 +48,7 @@ data class TurfWarsGame internal constructor(
 
     var state: MinigameState = MinigameState.INITIALIZING
         set(value) {
+            if (field == value) return
             field = value
             debug("Game state changed to $value")
             refreshPlayers()
@@ -76,7 +77,7 @@ data class TurfWarsGame internal constructor(
     }
 
     /**
-     * Called every tick (20 times per second)
+     * Called every second.
      */
     fun tick() {
         // Tick all the timers

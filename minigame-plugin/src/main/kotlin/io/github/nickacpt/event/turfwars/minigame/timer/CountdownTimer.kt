@@ -3,14 +3,9 @@ package io.github.nickacpt.event.turfwars.minigame.timer
 import io.github.nickacpt.event.turfwars.minigame.TurfWarsGame
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
-import net.kyori.adventure.text.TextComponent
 import kotlin.time.Duration.Companion.seconds
 
 open class CountdownTimer(protected val game: TurfWarsGame, private val totalSeconds: Int) {
-    companion object {
-        const val TICKS_PER_SECOND = 20
-    }
-
     init {
         require(totalSeconds > 0) { "Total seconds must be greater than 0" }
     }
@@ -44,7 +39,7 @@ open class CountdownTimer(protected val game: TurfWarsGame, private val totalSec
     }
 
     fun remainingTime(): Component {
-        val timeComponent = remainingTime.seconds.toComponents { minutes, seconds, _ ->
+        val timeComponent = (realRemainingTime - 1).seconds.toComponents { minutes, seconds, _ ->
             val timeComponents =
                 listOf(minutes, seconds.toLong()).takeIf { minutes > 0 }?.map { it.toString().padStart(2, '0') }
             val components = timeComponents?.map { Component.text(it) }
@@ -60,12 +55,10 @@ open class CountdownTimer(protected val game: TurfWarsGame, private val totalSec
     open fun onFinish() {}
 
     /**
-     * Ticks the timer, 20 times per second
+     * Ticks the timer, once second
      */
     fun tick() {
         if (!isRunning || isFinished) return
-        if (tickCount-- > 0) return
-        tickCount = TICKS_PER_SECOND
 
         when (--realRemainingTime) {
             0 -> {

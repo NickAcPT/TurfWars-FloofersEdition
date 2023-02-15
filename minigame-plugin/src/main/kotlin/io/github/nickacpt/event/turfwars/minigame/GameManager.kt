@@ -10,7 +10,7 @@ object GameManager {
     fun startGameTicking() {
         Bukkit.getScheduler().runTaskTimer(TurfWarsPlugin.instance, Runnable {
             games.values.forEach { it.tick() }
-        }, 10, 1)
+        }, 10, 20 /* 1 second */)
     }
 
     fun getGame(id: UUID): TurfWarsGame? {

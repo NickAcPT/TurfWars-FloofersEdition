@@ -48,12 +48,9 @@ object TurfWarsLogic {
     }
 
     fun TurfWarsGame.tickGame() {
-        val currentState = state
-        val nextState = moveToNextState(currentState)
-        if (nextState != null && nextState != currentState) {
-            state = nextState
-        }
+        generateSequence { moveToNextState(state) }.forEach { state = it }
     }
+
 
     val gameScoreboardTitle by lazy { locale.scoreboardTitle() }
 

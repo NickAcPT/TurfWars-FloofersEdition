@@ -19,7 +19,7 @@ data class GameTimers(
     )
 
     /**
-     * Ticks all the timers in the list, 20 times per second
+     * Ticks all the timers in the list, 1 time per second
      */
     fun tick() {
         timersList.forEach { it.tick() }
