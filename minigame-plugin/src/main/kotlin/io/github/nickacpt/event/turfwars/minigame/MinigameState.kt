@@ -19,19 +19,20 @@ enum class MinigameState(private val description: String, vararg val stateLogics
     INITIALIZING("<gray>Initializing..", InitializingStateGameLogic),
     WAITING("<yellow>Waiting for players..", PlayerWaitingStateGameLogic),
 
-    STARTING("<green>Starting in <yellow><time></yellow>..", LobbyCountdownResetStateLogic, StartingStateLogic),
-    TEAM_SELECTION("<gray>Team selection", LobbyCountdownResetStateLogic, TeamSelectionStateLogic),
-    PLAYER_LOCATION_SELECTION("<gray>Player location selection", PlayerLocationSelectionStateLogic),
+    STARTING_SOON("<green>Starting in <yellow><time></yellow>..", LobbyCountdownResetStateLogic, StartingStateLogic),
+
+    GAME_START("<gray>Game start", LobbyCountdownResetStateLogic, TeamSelectionStateLogic, PlayerLocationSelectionStateLogic),
 
     TURF_BUILD("<yellow>Turf Build", BuildStateLogic, GameEndStateLogic),
     TURF_COMBAT("<yellow>Turf Combat", CombatStateLogic, GameEndStateLogic),
+
     ENDING("<red>Ending");
 
     companion object {
-        fun firstGameStartState() = TEAM_SELECTION
+        fun firstGameStartState() = GAME_START
         fun endingGameState() = ENDING
 
-        fun waitingForPlayersStates() = arrayOf(WAITING, STARTING, TEAM_SELECTION)
+        fun waitingForPlayersStates() = arrayOf(WAITING, STARTING_SOON, GAME_START)
 
         fun inGameStates() = arrayOf(TURF_BUILD, TURF_COMBAT)
     }

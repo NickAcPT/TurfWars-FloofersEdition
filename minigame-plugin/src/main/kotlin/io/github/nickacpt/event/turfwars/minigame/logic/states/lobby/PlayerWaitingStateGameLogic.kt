@@ -9,7 +9,7 @@ object PlayerWaitingStateGameLogic : MinimumPlayerCheckStateGameLogic() {
         // we should switch to the starting state and start the countdown.
         if (hasMinimumPlayersToStart) {
             timers.lobbyCountdown.restart()
-            return MinigameState.STARTING
+            return MinigameState.STARTING_SOON
         }
 
         return null

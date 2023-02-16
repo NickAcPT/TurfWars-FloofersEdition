@@ -7,7 +7,7 @@ import io.github.nickacpt.event.turfwars.minigame.logic.states.TurfWarsGameState
 import io.github.nickacpt.event.turfwars.minigame.teams.TurfWarsTeam
 
 object TeamSelectionStateLogic : TurfWarsGameStateLogic {
-    override fun TurfWarsGame.tickState(): MinigameState {
+    override fun TurfWarsGame.tickState(): MinigameState? {
         // Woah finally! It's about time we picked the teams!
         val shuffledPlayers = ArrayDeque(players.shuffled())
 
@@ -35,6 +35,6 @@ object TeamSelectionStateLogic : TurfWarsGameStateLogic {
             }
         }
 
-        return MinigameState.PLAYER_LOCATION_SELECTION
+        return null
     }
 }
